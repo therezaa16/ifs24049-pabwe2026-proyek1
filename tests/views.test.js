@@ -809,6 +809,17 @@ describe('ProfileView', () => {
     expect(wrapper.find('.password-button').element.disabled).toBe(true);
     expect(wrapper.text()).toContain('backend belum menyediakan endpoint');
   });
+
+  it('menampilkan nilai bawaan saat informasi pengguna belum tersedia', () => {
+    useAuthStore().user = null;
+    const wrapper = mount(ProfileView);
+
+    expect(wrapper.find('h2.text-xl').text()).toBe('Mahasiswa');
+    expect(wrapper.find('.avatar').text()).toBe('M');
+    expect(wrapper.find('.min-w-0 > p').text()).toBe('Email belum tersedia');
+    expect(wrapper.find('#profile-name').element.value).toBe('');
+    expect(wrapper.find('#profile-email').element.value).toBe('');
+  });
 });
 
 describe('auth store dipakai bersama', () => {
