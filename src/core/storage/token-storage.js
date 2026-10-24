@@ -9,7 +9,7 @@ const safely = (operation, fallback) => {
 };
 
 export const tokenStorage = {
-  get: () => safely(() => window.localStorage.getItem(TOKEN_KEY), null),
-  set: (token) => safely(() => window.localStorage.setItem(TOKEN_KEY, token)),
-  clear: () => safely(() => window.localStorage.removeItem(TOKEN_KEY))
+  get: () => safely(() => globalThis.localStorage.getItem(TOKEN_KEY), null),
+  set: (token) => safely(() => globalThis.localStorage.setItem(TOKEN_KEY, token)),
+  clear: () => safely(() => globalThis.localStorage.removeItem(TOKEN_KEY))
 };

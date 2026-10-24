@@ -6,11 +6,11 @@ const rupiahFormatter = new Intl.NumberFormat('id-ID', {
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
-export const formatRupiah = (value) => rupiahFormatter.format(Number(value) || 0).replace(/\u00a0/g, ' ');
+export const formatRupiah = (value) => rupiahFormatter.format(Number(value) || 0).replaceAll('\u00a0', ' ');
 
 export const formatCompactRupiah = (value) => {
   const amount = Number(value) || 0;
-  if (Math.abs(amount) >= 1_000_000) return `${(amount / 1_000_000).toFixed(1).replace('.0', '')} jt`;
+  if (Math.abs(amount) >= 1_000_000) return `${(amount / 1_000_000).toFixed(1).replaceAll('.0', '')} jt`;
   if (Math.abs(amount) >= 1_000) return `${Math.round(amount / 1_000)} rb`;
   return String(amount);
 };

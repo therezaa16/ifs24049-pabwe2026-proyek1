@@ -57,7 +57,9 @@ useChart(canvas, () => ({
 
 <template>
   <div class="chart-box">
-    <canvas ref="canvas" role="img" aria-label="Grafik pengeluaran harian dan menit belajar selama tujuh hari terakhir"></canvas>
+    <canvas ref="canvas" aria-label="Grafik pengeluaran harian dan menit belajar selama tujuh hari terakhir">
+      Grafik pengeluaran harian dan menit belajar selama tujuh hari terakhir.
+    </canvas>
   </div>
 </template>
 

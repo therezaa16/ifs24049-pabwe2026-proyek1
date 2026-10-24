@@ -50,7 +50,7 @@ const submit = async () => {
 
       <div class="field">
         <label for="name">Nama lengkap</label>
-        <input id="name" v-model="form.name" class="input" autocomplete="name" :aria-invalid="Boolean(errors.name)" />
+        <input id="name" v-model="form.name" class="input" type="text" autocomplete="name" :aria-invalid="Boolean(errors.name)" />
         <span v-if="errors.name" class="field-error">{{ errors.name }}</span>
       </div>
 

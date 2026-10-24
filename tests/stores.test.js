@@ -89,12 +89,12 @@ describe('auth store', () => {
     const auth = useAuthStore();
     expect(authGuard({ meta: { requiresAuth: true }, fullPath: '/misi' })).toEqual({ name: 'login', query: { redirect: '/misi' } });
     expect(authGuard({ meta: { requiresAuth: true }, fullPath: '/' })).toEqual({ name: 'login', query: {} });
-    expect(authGuard({ meta: { guestOnly: true }, fullPath: '/masuk' })).toBe(true);
+    expect(authGuard({ meta: { guestOnly: true }, fullPath: '/masuk' })).toBeUndefined();
 
     auth.token = 'tok';
-    expect(authGuard({ meta: { requiresAuth: true }, fullPath: '/' })).toBe(true);
+    expect(authGuard({ meta: { requiresAuth: true }, fullPath: '/' })).toBeUndefined();
     expect(authGuard({ meta: { guestOnly: true }, fullPath: '/masuk' })).toEqual({ name: 'dashboard' });
-    expect(authGuard({ meta: {}, fullPath: '/x' })).toBe(true);
+    expect(authGuard({ meta: {}, fullPath: '/x' })).toBeUndefined();
   });
 });
 

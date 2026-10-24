@@ -62,15 +62,15 @@ const initial = computed(() => name.value.charAt(0).toUpperCase());
         <div class="mt-5 space-y-4">
           <div class="field">
             <label for="profile-name">Nama lengkap</label>
-            <input id="profile-name" class="input" :value="auth.user?.name || ''" autocomplete="name" readonly />
+            <input id="profile-name" class="input" :value="auth.user?.name || ''" readonly />
           </div>
           <div class="field">
             <label for="profile-email">Alamat email</label>
-            <input id="profile-email" class="input" :value="auth.user?.email || ''" type="email" autocomplete="email" readonly />
+            <input id="profile-email" class="input" :value="auth.user?.email || ''" type="email" readonly />
           </div>
-          <p class="availability-note" role="status">
+          <output class="availability-note" aria-live="polite">
             Perubahan biodata belum tersedia karena backend belum menyediakan endpoint penyimpanan profil.
-          </p>
+          </output>
           <button type="button" class="btn btn-block save-button" disabled>
             Simpan Perubahan
           </button>
@@ -101,9 +101,9 @@ const initial = computed(() => name.value.charAt(0).toUpperCase());
             <label for="confirm-password">Ulangi kata sandi baru</label>
             <input id="confirm-password" class="input" type="password" autocomplete="new-password" placeholder="Konfirmasi kata sandi" disabled />
           </div>
-          <p class="availability-note security-note" role="status">
+          <output class="availability-note security-note" aria-live="polite">
             Perubahan kata sandi belum tersedia karena backend belum menyediakan endpoint perubahan password.
-          </p>
+          </output>
           <button type="button" class="btn btn-block password-button" disabled>
             Perbarui Password
           </button>
@@ -187,7 +187,7 @@ const initial = computed(() => name.value.charAt(0).toUpperCase());
   background: #fff;
 }
 .input:disabled {
-  color: #94a3b8;
+  color: #475569;
   background: #f8fafc;
   cursor: not-allowed;
 }

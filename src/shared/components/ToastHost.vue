@@ -5,7 +5,7 @@ const { items, dismiss } = useToast();
 </script>
 
 <template>
-  <div class="toast-host" role="region" aria-label="Notifikasi" aria-live="polite">
+  <section class="toast-host" aria-label="Notifikasi" aria-live="polite">
     <button
       v-for="item in items"
       :key="item.id"
@@ -16,7 +16,7 @@ const { items, dismiss } = useToast();
     >
       {{ item.message }}
     </button>
-  </div>
+  </section>
 </template>
 
 <style scoped>

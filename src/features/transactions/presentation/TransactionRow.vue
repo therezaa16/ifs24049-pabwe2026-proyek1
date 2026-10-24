@@ -17,7 +17,7 @@ const tone = computed(() => STATUS_TONES[props.transaction.status]);
 </script>
 
 <template>
-  <li class="row" :class="[`row-${tone}`, { 'row-hatched': locked }]">
+  <div class="row" :class="[`row-${tone}`, { 'row-hatched': locked }]">
     <div class="main">
       <p class="title">
         <AppIcon v-if="locked" name="lock" :size="16" class="title-lock" />
@@ -45,7 +45,7 @@ const tone = computed(() => STATUS_TONES[props.transaction.status]);
         <AppIcon name="trash" :size="16" />
       </button>
     </div>
-  </li>
+  </div>
 </template>
 
 <style scoped>

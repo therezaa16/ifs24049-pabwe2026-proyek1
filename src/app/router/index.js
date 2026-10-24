@@ -23,19 +23,21 @@ export const authGuard = (to) => {
   const auth = useAuthStore();
 
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
-    return { name: 'login', query: to.fullPath === '/' ? {} : { redirect: to.fullPath } };
+    const query = to.fullPath === '/' ? {} : { redirect: to.fullPath };
+    return { name: 'login', query };
   }
   if (to.meta.guestOnly && auth.isAuthenticated) {
     return { name: 'dashboard' };
   }
-  return true;
+  return undefined;
 };
 
 export const createAppRouter = () => {
   const router = createRouter({ history: createWebHistory(), routes });
-  router.beforeEach(authGuard);
+  router.beforeEach((to) => authGuard(to) ?? true);
   router.afterEach((to) => {
-    document.title = to.meta.title ? `${to.meta.title} · ${APP_TITLE}` : APP_TITLE;
+    const title = typeof to.meta.title === 'string' ? to.meta.title : '';
+    document.title = title ? `${title} · ${APP_TITLE}` : APP_TITLE;
   });
   return router;
 };

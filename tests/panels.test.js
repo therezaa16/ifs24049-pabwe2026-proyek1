@@ -62,7 +62,10 @@ describe('BaseModal', () => {
   });
 
   it('aman bila dilepas sebelum fokus awal dipasang', () => {
-    mount(BaseModal, { props: { title: 'Cepat' } }).unmount();
+    const wrapper = mount(BaseModal, { props: { title: 'Cepat' } });
+    const dialog = wrapper.find('.dialog').element;
+    wrapper.unmount();
+    expect(dialog.isConnected).toBe(false);
   });
 });
 

@@ -1,10 +1,13 @@
 export const budgetUsage = ({ monthlyBudget, monthlySpending }) => {
-  if (!(monthlyBudget > 0)) return { hasBudget: false, percent: 0, tone: 'none', over: false };
+  const budget = Number(monthlyBudget);
+  if (budget <= 0 || Number.isNaN(budget)) return { hasBudget: false, percent: 0, tone: 'none', over: false };
 
-  const ratio = monthlySpending / monthlyBudget;
+  const ratio = monthlySpending / budget;
   const percent = Math.min(100, Math.max(0, Math.round(ratio * 100)));
   const over = ratio > 1;
-  const tone = over ? 'danger' : ratio >= 0.8 ? 'warning' : 'ok';
+  let tone = 'ok';
+  if (over) tone = 'danger';
+  else if (ratio >= 0.8) tone = 'warning';
   return { hasBudget: true, percent, tone, over };
 };
 

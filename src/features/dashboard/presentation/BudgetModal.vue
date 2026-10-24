@@ -24,8 +24,8 @@ const save = async () => {
     toast.success('Anggaran bulanan diperbarui');
     emit('saved');
     emit('close');
-  } catch (failure) {
-    error.value = failure.message;
+  } catch (error_) {
+    error.value = error_.message;
   } finally {
     saving.value = false;
   }

@@ -31,7 +31,9 @@ useChart(canvas, () => ({
 
 <template>
   <div class="chart-box">
-    <canvas v-show="hasData" ref="canvas" role="img" aria-label="Pengeluaran per kategori bulan ini"></canvas>
+    <canvas v-show="hasData" ref="canvas" aria-label="Pengeluaran per kategori bulan ini">
+      Grafik pengeluaran per kategori bulan ini.
+    </canvas>
     <p v-if="!hasData" class="none">Belum ada pengeluaran bulan ini.</p>
   </div>
 </template>

@@ -194,7 +194,7 @@ describe('komponen umum', () => {
     await router.isReady();
     const wrapper = mount(App, { global: { plugins: [router] } });
     expect(wrapper.text()).toContain('home');
-    expect(wrapper.find('[role="region"]').exists()).toBe(true);
+    expect(wrapper.find('section.toast-host').exists()).toBe(true);
   });
 });
 

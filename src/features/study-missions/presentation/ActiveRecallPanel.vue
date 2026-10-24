@@ -232,7 +232,8 @@ const claim = async () => {
           Tampilkan jawaban
         </button>
 
-        <div v-else class="ratings grid grid-cols-3 gap-2 w-full" role="group" aria-label="Seberapa ingat kamu?">
+        <fieldset v-else class="ratings grid grid-cols-3 gap-2 w-full">
+          <legend class="sr-only">Seberapa ingat kamu?</legend>
           <button
             v-for="rating in RATINGS"
             :key="rating.value"
@@ -243,7 +244,7 @@ const claim = async () => {
             <strong class="block text-xs font-bold text-slate-900">{{ rating.label }}</strong>
             <small class="block text-[10px] text-slate-500 mt-0.5">{{ rating.hint }}</small>
           </button>
-        </div>
+        </fieldset>
 
         <div class="flex justify-between items-center pt-2">
           <button

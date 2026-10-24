@@ -180,17 +180,13 @@ onMounted(load);
               <p class="panel-hint text-sm text-slate-500 mt-1">
                 {{ usage.over ? 'Melebihi anggaran' : 'Sisa anggaran' }} dari {{ formatRupiah(data.financial.monthlyBudget) }}
               </p>
-              <div class="bar w-full h-2 bg-slate-100 rounded-full overflow-hidden mt-5" role="progressbar" :aria-valuenow="usage.percent" aria-valuemin="0" aria-valuemax="100" aria-label="Pemakaian anggaran">
-                <span
-                  class="block h-full transition-all duration-500"
-                  :class="{
-                    'bg-gradient-to-r from-indigo-500 to-violet-500': usage.tone === 'ok',
-                    'bg-gradient-to-r from-amber-400 to-orange-500': usage.tone === 'warning',
-                    'bg-gradient-to-r from-rose-500 to-red-500': usage.tone === 'danger'
-                  }"
-                  :style="{ width: `${usage.percent}%` }"
-                ></span>
-              </div>
+              <progress
+                class="bar w-full h-2 bg-slate-100 rounded-full overflow-hidden mt-5"
+                :class="`bar-${usage.tone}`"
+                :value="usage.percent"
+                max="100"
+                aria-label="Pemakaian anggaran"
+              ></progress>
               <p class="bar-label num text-xs font-semibold text-slate-500 mt-2">
                 Terpakai {{ formatRupiah(data.financial.monthlySpending) }} • {{ usage.percent }}%
               </p>
@@ -339,6 +335,17 @@ onMounted(load);
 <style scoped>
 .head { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; justify-content: space-between; }
 .sub { color: var(--ink-soft); }
+.bar {
+  appearance: none;
+  border: 0;
+}
+.bar::-webkit-progress-bar { background: #f1f5f9; }
+.bar-ok::-webkit-progress-value { background: linear-gradient(90deg, #4f46e5, #7c3aed); }
+.bar-warning::-webkit-progress-value { background: linear-gradient(90deg, #fbbf24, #f97316); }
+.bar-danger::-webkit-progress-value { background: linear-gradient(90deg, #f43f5e, #dc2626); }
+.bar::-moz-progress-bar { background: #4f46e5; }
+.bar-warning::-moz-progress-bar { background: #d97706; }
+.bar-danger::-moz-progress-bar { background: #dc2626; }
 .ring {
   background: conic-gradient(#22c55e var(--score, 0%), #e5e7eb 0);
 }

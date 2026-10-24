@@ -32,7 +32,9 @@ useChart(canvas, () => ({
 
 <template>
   <div class="chart-box">
-    <canvas v-show="hasData" ref="canvas" role="img" aria-label="Diagram alokasi: kebutuhan, keinginan terbuka, terkunci, dan dibatalkan"></canvas>
+    <canvas v-show="hasData" ref="canvas" aria-label="Diagram alokasi: kebutuhan, keinginan terbuka, terkunci, dan dibatalkan">
+      Diagram alokasi: kebutuhan, keinginan terbuka, terkunci, dan dibatalkan.
+    </canvas>
     <p v-if="!hasData" class="none">Belum ada pengeluaran atau keinginan untuk ditampilkan.</p>
   </div>
 </template>

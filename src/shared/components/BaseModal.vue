@@ -29,11 +29,11 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="backdrop" @mousedown.self="emit('close')">
-    <section
+    <dialog
       ref="dialog"
+      open
       class="dialog"
       :class="{ 'dialog-wide': wide }"
-      role="dialog"
       aria-modal="true"
       :aria-label="title"
       tabindex="-1"
@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
         </button>
       </header>
       <div class="dialog-body"><slot /></div>
-    </section>
+    </dialog>
   </div>
 </template>
 
@@ -61,9 +61,14 @@ onBeforeUnmount(() => {
   backdrop-filter: blur(6px);
 }
 .dialog {
+  position: relative;
+  inset: auto;
+  margin: 0;
   width: min(30rem, 100%);
+  max-width: none;
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
+  color: var(--ink);
   background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, #fff 100%);
   border: 1px solid var(--line);
   border-radius: var(--radius-l);

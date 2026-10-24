@@ -149,7 +149,7 @@ onMounted(() => auth.restoreSession());
 <style scoped>
 .nav-link.active {
   color: #312e81;
-  background: linear-gradient(90deg, rgba(99, 102, 241, 0.12) 0%, transparent 100%);
+  background: #eef2ff;
 }
 .profile-link:hover,
 .profile-link.router-link-active {

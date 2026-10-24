@@ -92,7 +92,7 @@ onMounted(load);
     <div
       v-if="store.lockedWishes.length"
       class="vault relative overflow-hidden flex items-center gap-4 p-5 bg-gradient-to-r from-amber-50 via-orange-50/80 to-white border border-amber-200/80 rounded-3xl text-amber-900 shadow-sm"
-      role="status"
+      aria-live="polite"
     >
       <div class="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-amber-100/40 to-transparent"></div>
       <div class="relative p-3 bg-white/80 rounded-2xl shadow-inner">
@@ -106,7 +106,8 @@ onMounted(load);
 
     <!-- Filters Section -->
     <div class="filters flex flex-wrap gap-3 items-center justify-between panel p-3">
-      <div class="chips flex flex-wrap gap-1.5" role="group" aria-label="Filter jenis">
+      <fieldset class="chips flex flex-wrap gap-1.5">
+        <legend class="sr-only">Filter jenis</legend>
         <button
           v-for="filter in typeFilters"
           :key="filter.value"
@@ -120,7 +121,7 @@ onMounted(load);
         >
           {{ filter.label }}
         </button>
-      </div>
+      </fieldset>
 
       <select
         class="input w-auto px-4 py-1.5 text-xs font-semibold rounded-2xl"
@@ -140,14 +141,14 @@ onMounted(load);
       <span class="animate-spin text-lg">⏳</span> Memuat data transaksi…
     </div>
 
-    <ul v-else-if="store.filteredItems.length" class="list space-y-2.5">
-      <TransactionRow
-        v-for="item in store.filteredItems"
-        :key="item.id"
-        :transaction="item"
-        @cancel="handleCancelRequest"
-        @remove="pendingDelete = $event"
-      />
+    <ul v-else-if="store.filteredItems.length" class="list space-y-2.5" aria-label="Daftar transaksi">
+      <li v-for="item in store.filteredItems" :key="item.id">
+        <TransactionRow
+          :transaction="item"
+          @cancel="handleCancelRequest"
+          @remove="pendingDelete = $event"
+        />
+      </li>
     </ul>
 
     <EmptyState

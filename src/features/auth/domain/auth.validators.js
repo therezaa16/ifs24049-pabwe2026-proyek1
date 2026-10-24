@@ -13,7 +13,8 @@ export const validateRegisterForm = ({ name, email, password, confirmPassword, m
   if (!EMAIL_PATTERN.test(email.trim())) errors.email = 'Masukkan alamat email yang valid';
   if (password.length < 6) errors.password = 'Password minimal 6 karakter';
   if (confirmPassword !== password) errors.confirmPassword = 'Konfirmasi password tidak sama';
-  if (monthlyBudget !== '' && !(Number(monthlyBudget) >= 0)) {
+  const budget = Number(monthlyBudget);
+  if (monthlyBudget !== '' && (budget < 0 || Number.isNaN(budget))) {
     errors.monthlyBudget = 'Anggaran bulanan harus berupa angka 0 atau lebih';
   }
   return errors;

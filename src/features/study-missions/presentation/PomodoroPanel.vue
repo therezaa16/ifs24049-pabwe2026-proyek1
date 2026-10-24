@@ -95,7 +95,8 @@ const claim = async () => {
 
       <div class="field">
         <span class="label">Durasi fokus</span>
-        <div class="presets" role="group" aria-label="Durasi fokus">
+        <fieldset class="presets">
+          <legend class="sr-only">Durasi fokus</legend>
           <button
             v-for="minutes in POMODORO_PRESETS"
             :key="minutes"
@@ -108,7 +109,7 @@ const claim = async () => {
           >
             <strong class="num">{{ minutes }}</strong> menit
           </button>
-        </div>
+        </fieldset>
         <span v-if="wish" class="field-hint">Membuka keinginan membutuhkan minimal {{ store.settings.minPomodoroMinutesToUnlock }} menit.</span>
         <span v-if="isDemoSpeed" class="field-hint">Mode demo: sesi dipercepat menjadi {{ formatClock(scaledSeconds(durationMinutes, store.settings.timeScale)) }}.</span>
       </div>
@@ -120,11 +121,11 @@ const claim = async () => {
 
     <div v-else class="session">
       <div class="ring-wrap">
-        <svg viewBox="0 0 120 120" class="ring" role="img" :aria-label="`Sisa waktu ${formatClock(countdown.remaining.value)}`">
+        <svg viewBox="0 0 120 120" class="ring" aria-hidden="true">
           <circle cx="60" cy="60" r="54" class="ring-track" />
           <circle cx="60" cy="60" r="54" class="ring-bar" :stroke-dasharray="RING_LENGTH" :stroke-dashoffset="ringOffset" />
         </svg>
-        <p class="clock num">{{ phase === 'ready' ? '00:00' : formatClock(countdown.remaining.value) }}</p>
+        <output class="clock num" aria-label="Sisa waktu">{{ phase === 'ready' ? '00:00' : formatClock(countdown.remaining.value) }}</output>
       </div>
 
       <p class="session-subject">{{ session.subject }}</p>
@@ -142,7 +143,7 @@ const claim = async () => {
 </template>
 
 <style scoped>
-.presets { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.presets { display: flex; flex-wrap: wrap; gap: 0.5rem; border: 0; margin: 0; padding: 0; }
 .preset { padding: 0.5rem 1rem; border: 1.5px solid var(--ink); border-radius: var(--radius-s); background: var(--surface); }
 .preset strong { font-family: var(--font-display); font-size: 1.2rem; }
 .preset.on { background: var(--cobalt); color: #fff; }
