@@ -45,8 +45,8 @@ const submit = async () => {
       <p v-if="formError" class="form-error" role="alert">{{ formError }}</p>
 
       <div class="field">
-        <label for="email">Email</label>
-        <input id="email" v-model="form.email" class="input" type="email" autocomplete="email" :aria-invalid="Boolean(errors.email)" />
+        <label for="username">Email</label>
+        <input id="username" name="username" v-model="form.email" class="input" type="email" autocomplete="email" :aria-invalid="Boolean(errors.email)" />
         <span v-if="errors.email" class="field-error">{{ errors.email }}</span>
       </div>
 
@@ -56,7 +56,7 @@ const submit = async () => {
         <span v-if="errors.password" class="field-error">{{ errors.password }}</span>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block" :disabled="submitting">
+      <button id="btn-submit" type="submit" class="btn btn-primary btn-block" :disabled="submitting">
         {{ submitting ? 'Memproses…' : 'Masuk' }}
       </button>
 

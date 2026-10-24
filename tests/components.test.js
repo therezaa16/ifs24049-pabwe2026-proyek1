@@ -46,6 +46,9 @@ describe('LoginView', () => {
 
   it('menampilkan error validasi tanpa memanggil API', async () => {
     const { wrapper } = await mountLogin();
+    expect(wrapper.find('#username').exists()).toBe(true);
+    expect(wrapper.find('#password').exists()).toBe(true);
+    expect(wrapper.find('#btn-submit').exists()).toBe(true);
     await wrapper.find('form').trigger('submit');
     expect(wrapper.text()).toContain('Masukkan alamat email yang valid');
     expect(authApi.login).not.toHaveBeenCalled();
@@ -54,7 +57,7 @@ describe('LoginView', () => {
   it('login berhasil mengarahkan ke beranda', async () => {
     authApi.login.mockResolvedValue({ token: 'tok', user: { id: 1 } });
     const { wrapper, router } = await mountLogin();
-    await wrapper.find('#email').setValue('eliza@del.ac.id');
+    await wrapper.find('#username').setValue('eliza@del.ac.id');
     await wrapper.find('#password').setValue('rahasia123');
     await wrapper.find('form').trigger('submit');
     await flushPromises();
@@ -66,7 +69,7 @@ describe('LoginView', () => {
   it('menampilkan pesan server saat login gagal', async () => {
     authApi.login.mockRejectedValue(new ApiError('Email atau password salah', 401));
     const { wrapper } = await mountLogin();
-    await wrapper.find('#email').setValue('eliza@del.ac.id');
+    await wrapper.find('#username').setValue('eliza@del.ac.id');
     await wrapper.find('#password').setValue('salah');
     await wrapper.find('form').trigger('submit');
     await flushPromises();
