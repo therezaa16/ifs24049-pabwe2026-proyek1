@@ -1,0 +1,44 @@
+:root {
+  color-scheme: light;
+
+  --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
+
+  /* Modern clean palette */
+  --paper: #f8fafc;
+  --surface: #ffffff;
+  --surface-sunken: #f1f5f9;
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --ink-faint: #64748b;
+  --line: #e2e8f0;
+
+  --cobalt: #4f46e5;
+  --cobalt-deep: #4338ca;
+  --cobalt-wash: #eef2ff;
+
+  --brass: #f59e0b;
+  --brass-ink: #92400e;
+  --brass-wash: #fef3c7;
+
+  --moss: #059669;
+  --moss-wash: #ecfdf5;
+
+  --slate: #475569;
+  --slate-wash: #f1f5f9;
+
+  --rose: #dc2626;
+  --rose-wash: #fef2f2;
+
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 16px;
+
+  --shadow-hard: 0 1px 2px 0 rgb(0 0 0 / 0.03), 0 1px 3px 0 rgb(0 0 0 / 0.05);
+  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-elevated: 0 20px 25px -5px rgb(15 23 42 / 0.05), 0 8px 10px -6px rgb(15 23 42 / 0.02);
+  --shadow-glow: 0 0 0 1px rgb(79 70 229 / 0.05), 0 10px 40px -10px rgb(79 70 229 / 0.4);
+
+  --sidebar-width: 17rem;
+  --content-max: 80rem;
+}
