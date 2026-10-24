@@ -219,6 +219,28 @@ describe('router', () => {
     expect(document.title).toContain('Daftar');
   });
 
+  it('halaman login dapat dibuka langsung lewat path publik /auth/login', async () => {
+    useAuthStore().clearSession();
+    const router = createAppRouter();
+    await router.push('/auth/login');
+
+    expect(router.currentRoute.value.path).toBe('/auth/login');
+    expect(router.currentRoute.value.name).toBe('login');
+    expect(router.currentRoute.value.meta.guestOnly).toBe(true);
+    expect(document.title).toContain('Masuk');
+  });
+
+  it('halaman daftar dapat dibuka langsung lewat path publik /auth/register', async () => {
+    useAuthStore().clearSession();
+    const router = createAppRouter();
+    await router.push('/auth/register');
+
+    expect(router.currentRoute.value.path).toBe('/auth/register');
+    expect(router.currentRoute.value.name).toBe('register');
+    expect(router.currentRoute.value.meta.guestOnly).toBe(true);
+    expect(document.title).toContain('Daftar');
+  });
+
   it('rute profil terlindungi dan tersedia sebagai halaman keempat', async () => {
     const shellRoute = routes.find((route) => route.path === '/');
     const profileRoute = shellRoute.children.find((route) => route.name === 'profile');

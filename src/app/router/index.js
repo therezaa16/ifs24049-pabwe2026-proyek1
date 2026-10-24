@@ -3,8 +3,8 @@ import { useAuthStore } from '@/features/auth/application/auth.store.js';
 import { APP_TITLE } from '@/core/config/env.js';
 
 export const routes = [
-  { path: '/masuk', name: 'login', component: () => import('@/features/auth/presentation/LoginView.vue'), meta: { guestOnly: true, title: 'Masuk' } },
-  { path: '/daftar', name: 'register', component: () => import('@/features/auth/presentation/RegisterView.vue'), meta: { guestOnly: true, title: 'Daftar' } },
+  { path: '/masuk', alias: '/auth/login', name: 'login', component: () => import('@/features/auth/presentation/LoginView.vue'), meta: { guestOnly: true, title: 'Masuk' } },
+  { path: '/daftar', alias: '/auth/register', name: 'register', component: () => import('@/features/auth/presentation/RegisterView.vue'), meta: { guestOnly: true, title: 'Daftar' } },
   {
     path: '/',
     component: () => import('../layouts/AppShell.vue'),
