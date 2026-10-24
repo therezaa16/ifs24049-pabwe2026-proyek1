@@ -2,11 +2,32 @@ import { fileURLToPath, URL } from 'node:url';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig, loadEnv } from 'vite';
 
+const inlineEntryStylesheet = () => ({
+  name: 'inline-entry-stylesheet',
+  apply: 'build',
+  enforce: 'post',
+  generateBundle(_, bundle) {
+    const html = bundle['index.html'];
+    if (!html || typeof html.source !== 'string') return;
+
+    html.source = html.source.replace(/<link\b(?=[^>]*\brel="stylesheet")[^>]*>/g, (link) => {
+      const href = link.match(/\bhref="([^"]+\.css)"/)?.[1];
+      const fileName = href?.split('/').pop();
+      const asset = Object.values(bundle).find((item) => item.type === 'asset' && item.fileName === `assets/${fileName}`);
+      if (!asset) return link;
+
+      const css = typeof asset.source === 'string' ? asset.source : new TextDecoder().decode(asset.source);
+      delete bundle[asset.fileName];
+      return `<style>${css}</style>`;
+    });
+  }
+});
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    plugins: [vue()],
+    plugins: [vue(), inlineEntryStylesheet()],
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) }
     },

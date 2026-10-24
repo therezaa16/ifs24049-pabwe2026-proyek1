@@ -88,14 +88,13 @@ onMounted(() => auth.restoreSession());
         <RouterLink
           to="/profil"
           class="profile-link flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 shadow-sm transition-all"
-          aria-label="Buka Profil Saya"
         >
           <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/15">
             {{ (auth.user?.name || 'M').charAt(0).toUpperCase() }}
           </div>
           <div class="overflow-hidden">
             <p class="user-name text-sm font-bold truncate">{{ auth.user?.name || 'Mahasiswa' }}</p>
-            <p class="user-mail text-[11px] text-slate-500 truncate">{{ auth.user?.email || 'email@mahasiswa.ac.id' }}</p>
+            <p class="user-mail text-[11px] text-slate-600 truncate">{{ auth.user?.email || 'email@mahasiswa.ac.id' }}</p>
           </div>
           <AppIcon name="arrow" :size="16" class="profile-arrow text-slate-400 shrink-0" />
         </RouterLink>

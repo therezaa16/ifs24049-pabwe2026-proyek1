@@ -163,6 +163,7 @@ describe('komponen umum', () => {
   it('EmptyState menampilkan judul, pesan opsional, dan slot', () => {
     const withMessage = mount(EmptyState, { props: { title: 'Kosong', message: 'Pesan' }, slots: { default: '<b>aksi</b>', visual: '<i>v</i>' } });
     expect(withMessage.text()).toContain('Kosong');
+    expect(withMessage.find('h2').text()).toBe('Kosong');
     expect(withMessage.text()).toContain('Pesan');
     const without = mount(EmptyState, { props: { title: 'Kosong' } });
     expect(without.find('p').exists()).toBe(false);
@@ -344,6 +345,8 @@ describe('AppShell', () => {
     const { wrapper, router } = await mountShell();
     expect(wrapper.find('.user-name').text()).toBeTruthy();
     expect(wrapper.find('.profile-link').attributes('href')).toBe('/profil');
+    expect(wrapper.find('.profile-link').attributes('aria-label')).toBeUndefined();
+    expect(wrapper.find('.user-mail').classes()).toContain('text-slate-600');
     expect(wrapper.findAll('.tabbar .tab-link')).toHaveLength(4);
     const logout = wrapper.findAll('button').filter((b) => b.text().includes('Keluar') || b.attributes('aria-label') === 'Keluar');
     await logout[0].trigger('click');
