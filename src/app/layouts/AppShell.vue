@@ -16,7 +16,8 @@ const showLogoutConfirm = ref(false);
 const navItems = [
   { to: '/', label: 'Dashboard', icon: 'grid', exact: true },
   { to: '/transaksi', label: 'Transaksi', icon: 'receipt' },
-  { to: '/misi', label: 'Misi Belajar', icon: 'timer' }
+  { to: '/misi', label: 'Misi Belajar', icon: 'timer' },
+  { to: '/profil', label: 'Profil', icon: 'user' }
 ];
 
 const promptLogout = () => {
@@ -84,7 +85,11 @@ onMounted(() => auth.restoreSession());
       </div>
 
       <div class="rail-user pt-5 border-t border-slate-100 space-y-3">
-        <div class="flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 shadow-sm">
+        <RouterLink
+          to="/profil"
+          class="profile-link flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 shadow-sm transition-all"
+          aria-label="Buka Profil Saya"
+        >
           <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/15">
             {{ (auth.user?.name || 'M').charAt(0).toUpperCase() }}
           </div>
@@ -92,7 +97,8 @@ onMounted(() => auth.restoreSession());
             <p class="user-name text-sm font-bold truncate">{{ auth.user?.name || 'Mahasiswa' }}</p>
             <p class="user-mail text-[11px] text-slate-500 truncate">{{ auth.user?.email || 'email@mahasiswa.ac.id' }}</p>
           </div>
-        </div>
+          <AppIcon name="arrow" :size="16" class="profile-arrow text-slate-400 shrink-0" />
+        </RouterLink>
         <button
           type="button"
           class="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-semibold text-slate-600 hover:text-rose-600 bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 rounded-2xl transition-all shadow-sm"
@@ -111,7 +117,7 @@ onMounted(() => auth.restoreSession());
     </main>
 
     <!-- Mobile Bottom Tabbar -->
-    <nav class="tabbar fixed inset-x-0 bottom-0 z-20 grid grid-cols-3 bg-white/90 backdrop-blur-xl border-t border-slate-200/70 py-1.5 md:hidden shadow-[0_-10px_40px_-20px_rgba(79,70,229,0.5)]" aria-label="Menu utama">
+    <nav class="tabbar fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 bg-white/90 backdrop-blur-xl border-t border-slate-200/70 py-1.5 md:hidden shadow-[0_-10px_40px_-20px_rgba(79,70,229,0.5)]" aria-label="Menu utama">
       <RouterLink
         v-for="item in navItems"
         :key="item.to"
@@ -145,6 +151,14 @@ onMounted(() => auth.restoreSession());
 .nav-link.active {
   color: #312e81;
   background: linear-gradient(90deg, rgba(99, 102, 241, 0.12) 0%, transparent 100%);
+}
+.profile-link:hover,
+.profile-link.router-link-active {
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+.profile-arrow {
+  transform: rotate(-45deg);
 }
 .tab-link.active {
   color: #4f46e5;

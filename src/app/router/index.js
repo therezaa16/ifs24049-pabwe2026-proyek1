@@ -12,7 +12,8 @@ export const routes = [
     children: [
       { path: '', name: 'dashboard', component: () => import('@/features/dashboard/presentation/DashboardView.vue'), meta: { title: 'Dashboard' } },
       { path: 'transaksi', name: 'transactions', component: () => import('@/features/transactions/presentation/TransactionsView.vue'), meta: { title: 'Transaksi' } },
-      { path: 'misi', name: 'missions', component: () => import('@/features/study-missions/presentation/StudyMissionsView.vue'), meta: { title: 'Misi Belajar' } }
+      { path: 'misi', name: 'missions', component: () => import('@/features/study-missions/presentation/StudyMissionsView.vue'), meta: { title: 'Misi Belajar' } },
+      { path: 'profil', name: 'profile', component: () => import('@/features/profile/presentation/ProfileView.vue'), meta: { title: 'Profil Saya' } }
     ]
   },
   { path: '/:pathMatch(.*)*', redirect: '/' }

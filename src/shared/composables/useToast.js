@@ -6,15 +6,17 @@ let nextId = 1;
 const DEFAULT_DURATION_MS = 4200;
 
 export const useToast = () => {
+  // Ubah array di tempat (bukan diganti) agar ToastHost, yang memegang referensi `items`, tetap reaktif.
   const dismiss = (id) => {
-    state.items = state.items.filter((item) => item.id !== id);
+    const index = state.items.findIndex((item) => item.id === id);
+    if (index >= 0) state.items.splice(index, 1);
   };
 
   const push = (message, tone = 'info', duration = DEFAULT_DURATION_MS) => {
     const id = nextId;
     nextId += 1;
     state.items.push({ id, message, tone });
-    if (duration > 0) setTimeout(() => dismiss(id), duration);
+    setTimeout(() => dismiss(id), duration);
     return id;
   };
 

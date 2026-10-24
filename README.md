@@ -1,1 +1,0 @@
-# ifs24049-pabwe2026-proyek1-fronted

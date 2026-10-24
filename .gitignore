@@ -1,3 +1,11 @@
 node_modules
 dist
+coverage
 .env
+.env.*
+!.env.example
+*.log
+.trivy-cache
+trivy-results.sarif
+latest-app.zip
+.DS_Store
