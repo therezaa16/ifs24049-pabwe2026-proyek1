@@ -6,7 +6,7 @@ import { MISSION_LABELS } from '@/shared/domain/mission-types.js';
 import AppIcon from '@/shared/components/AppIcon.vue';
 import PadlockMark from '@/shared/components/PadlockMark.vue';
 import { useAuthStore } from '@/features/auth/application/auth.store.js';
-import { STATUS_LABELS, STATUS_TONES } from '@/features/transactions/domain/transaction.model.js';
+import { STATUS_LABELS, STATUS_TONES } from '@/features/transactions/presentation/transaction.presenter.js';
 import { useDashboardStore } from '../application/dashboard.store.js';
 import { budgetUsage, disciplineLabel, firstName } from '../domain/dashboard.model.js';
 import AllocationChart from './charts/AllocationChart.vue';
@@ -182,7 +182,7 @@ onMounted(load);
               </p>
               <progress
                 class="bar w-full h-2 bg-slate-100 rounded-full overflow-hidden mt-5"
-                :class="`bar-${usage.tone}`"
+                :class="`bar-${usage.level}`"
                 :value="usage.percent"
                 max="100"
                 aria-label="Pemakaian anggaran"

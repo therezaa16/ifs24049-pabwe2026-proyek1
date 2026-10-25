@@ -5,6 +5,7 @@ import { fieldErrorsOf } from '@/core/http/api-error.js';
 import { validateLoginForm, resolveRedirect } from '../domain/auth.validators.js';
 import { useAuthStore } from '../application/auth.store.js';
 import AuthLayout from './AuthLayout.vue';
+import FormField from '@/shared/components/FormField.vue';
 
 const auth = useAuthStore();
 const router = useRouter();
@@ -44,17 +45,13 @@ const submit = async () => {
 
       <p v-if="formError" class="form-error" role="alert">{{ formError }}</p>
 
-      <div class="field">
-        <label for="username">Email</label>
-        <input id="username" name="username" v-model="form.email" class="input" type="email" autocomplete="email" :aria-invalid="Boolean(errors.email)" />
-        <span v-if="errors.email" class="field-error">{{ errors.email }}</span>
-      </div>
+      <FormField id="username" label="Email" :error="errors.email" v-slot="{ invalid }">
+        <input id="username" name="username" v-model="form.email" class="input" type="email" autocomplete="email" :aria-invalid="invalid" />
+      </FormField>
 
-      <div class="field">
-        <label for="password">Password</label>
-        <input id="password" v-model="form.password" class="input" type="password" autocomplete="current-password" :aria-invalid="Boolean(errors.password)" />
-        <span v-if="errors.password" class="field-error">{{ errors.password }}</span>
-      </div>
+      <FormField id="password" label="Password" :error="errors.password" v-slot="{ invalid }">
+        <input id="password" v-model="form.password" class="input" type="password" autocomplete="current-password" :aria-invalid="invalid" />
+      </FormField>
 
       <button id="btn-submit" type="submit" class="btn btn-primary btn-block" :disabled="submitting">
         {{ submitting ? 'Memproses…' : 'Masuk' }}

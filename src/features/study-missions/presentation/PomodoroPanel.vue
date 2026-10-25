@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { ApiError } from '@/core/http/api-error.js';
+import { remainingSecondsOf } from '@/core/http/api-error.js';
 import { formatClock } from '@/core/format/formatters.js';
 import { MISSION_TYPES } from '@/shared/domain/mission-types.js';
 import AppIcon from '@/shared/components/AppIcon.vue';
@@ -75,7 +75,7 @@ const claim = async () => {
     session.value = null;
     emit('completed', result);
   } catch (error) {
-    const remainingSeconds = error instanceof ApiError ? error.errors?.remaining_seconds : null;
+    const remainingSeconds = remainingSecondsOf(error);
     if (remainingSeconds) countdown.start(remainingSeconds + 1);
     toast.error(error.message);
   } finally {

@@ -5,6 +5,7 @@ import { fieldErrorsOf } from '@/core/http/api-error.js';
 import { validateRegisterForm } from '../domain/auth.validators.js';
 import { useAuthStore } from '../application/auth.store.js';
 import AuthLayout from './AuthLayout.vue';
+import FormField from '@/shared/components/FormField.vue';
 
 const auth = useAuthStore();
 const router = useRouter();
@@ -48,37 +49,26 @@ const submit = async () => {
 
       <p v-if="formError" class="form-error" role="alert">{{ formError }}</p>
 
-      <div class="field">
-        <label for="name">Nama lengkap</label>
-        <input id="name" v-model="form.name" class="input" type="text" autocomplete="name" :aria-invalid="Boolean(errors.name)" />
-        <span v-if="errors.name" class="field-error">{{ errors.name }}</span>
-      </div>
+      <FormField id="name" label="Nama lengkap" :error="errors.name" v-slot="{ invalid }">
+        <input id="name" v-model="form.name" class="input" type="text" autocomplete="name" :aria-invalid="invalid" />
+      </FormField>
 
-      <div class="field">
-        <label for="email">Email</label>
-        <input id="email" v-model="form.email" class="input" type="email" autocomplete="email" :aria-invalid="Boolean(errors.email)" />
-        <span v-if="errors.email" class="field-error">{{ errors.email }}</span>
-      </div>
+      <FormField id="email" label="Email" :error="errors.email" v-slot="{ invalid }">
+        <input id="email" v-model="form.email" class="input" type="email" autocomplete="email" :aria-invalid="invalid" />
+      </FormField>
 
       <div class="pair">
-        <div class="field">
-          <label for="password">Password</label>
-          <input id="password" v-model="form.password" class="input" type="password" autocomplete="new-password" :aria-invalid="Boolean(errors.password)" />
-          <span v-if="errors.password" class="field-error">{{ errors.password }}</span>
-        </div>
-        <div class="field">
-          <label for="confirm">Ulangi password</label>
-          <input id="confirm" v-model="form.confirmPassword" class="input" type="password" autocomplete="new-password" :aria-invalid="Boolean(errors.confirmPassword)" />
-          <span v-if="errors.confirmPassword" class="field-error">{{ errors.confirmPassword }}</span>
-        </div>
+        <FormField id="password" label="Password" :error="errors.password" v-slot="{ invalid }">
+          <input id="password" v-model="form.password" class="input" type="password" autocomplete="new-password" :aria-invalid="invalid" />
+        </FormField>
+        <FormField id="confirm" label="Ulangi password" :error="errors.confirmPassword" v-slot="{ invalid }">
+          <input id="confirm" v-model="form.confirmPassword" class="input" type="password" autocomplete="new-password" :aria-invalid="invalid" />
+        </FormField>
       </div>
 
-      <div class="field">
-        <label for="budget">Anggaran bulanan (opsional)</label>
-        <input id="budget" v-model="form.monthlyBudget" class="input num" type="number" min="0" step="1000" inputmode="numeric" placeholder="1500000" :aria-invalid="Boolean(errors.monthlyBudget)" />
-        <span v-if="errors.monthlyBudget" class="field-error">{{ errors.monthlyBudget }}</span>
-        <span v-else class="field-hint">Dipakai untuk menghitung sisa anggaran di dashboard.</span>
-      </div>
+      <FormField id="budget" label="Anggaran bulanan (opsional)" :error="errors.monthlyBudget" hint="Dipakai untuk menghitung sisa anggaran di dashboard." v-slot="{ invalid }">
+        <input id="budget" v-model="form.monthlyBudget" class="input num" type="number" min="0" step="1000" inputmode="numeric" placeholder="1500000" :aria-invalid="invalid" />
+      </FormField>
 
       <button type="submit" class="btn btn-primary btn-block" :disabled="submitting">
         {{ submitting ? 'Memproses…' : 'Daftar' }}

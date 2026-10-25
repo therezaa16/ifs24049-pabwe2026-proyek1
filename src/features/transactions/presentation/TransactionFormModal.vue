@@ -4,10 +4,12 @@ import { fieldErrorsOf } from '@/core/http/api-error.js';
 import { MISSION_LABELS, MISSION_TYPES } from '@/shared/domain/mission-types.js';
 import BaseModal from '@/shared/components/BaseModal.vue';
 import AppIcon from '@/shared/components/AppIcon.vue';
-import { CATEGORIES, TRANSACTION_TYPES, TYPE_LABELS } from '../domain/transaction.model.js';
+import { CATEGORIES, TRANSACTION_TYPES } from '../domain/transaction.model.js';
+import { TYPE_LABELS } from './transaction.presenter.js';
 import { validateTransactionForm } from '../domain/transaction.validators.js';
 import { useTransactionsStore } from '../application/transactions.store.js';
 import { useToast } from '@/shared/composables/useToast.js';
+import FormField from '@/shared/components/FormField.vue';
 
 const emit = defineEmits(['close']);
 const store = useTransactionsStore();
@@ -60,25 +62,19 @@ const submit = async () => {
         <p><strong>Keinginan tidak langsung berlaku.</strong> Ia disimpan terkunci sampai kamu menyelesaikan misi belajar.</p>
       </div>
 
-      <div class="field">
-        <label for="tx-title">Judul</label>
-        <input id="tx-title" v-model="form.title" class="input" placeholder="Contoh: Makan siang kantin" :aria-invalid="Boolean(errors.title)" />
-        <span v-if="errors.title" class="field-error">{{ errors.title }}</span>
-      </div>
+      <FormField id="tx-title" label="Judul" :error="errors.title" v-slot="{ invalid }">
+        <input id="tx-title" v-model="form.title" class="input" placeholder="Contoh: Makan siang kantin" :aria-invalid="invalid" />
+      </FormField>
 
       <div class="pair">
-        <div class="field">
-          <label for="tx-amount">Nominal (Rp)</label>
-          <input id="tx-amount" v-model="form.amount" class="input num" type="number" min="0" step="500" inputmode="numeric" :aria-invalid="Boolean(errors.amount)" />
-          <span v-if="errors.amount" class="field-error">{{ errors.amount }}</span>
-        </div>
-        <div class="field">
-          <label for="tx-category">Kategori</label>
+        <FormField id="tx-amount" label="Nominal (Rp)" :error="errors.amount" v-slot="{ invalid }">
+          <input id="tx-amount" v-model="form.amount" class="input num" type="number" min="0" step="500" inputmode="numeric" :aria-invalid="invalid" />
+        </FormField>
+        <FormField id="tx-category" label="Kategori" :error="errors.category">
           <select id="tx-category" v-model="form.category" class="input">
             <option v-for="category in CATEGORIES" :key="category" :value="category">{{ category }}</option>
           </select>
-          <span v-if="errors.category" class="field-error">{{ errors.category }}</span>
-        </div>
+        </FormField>
       </div>
 
       <fieldset v-if="isWant" class="field mission-pick">
@@ -92,10 +88,9 @@ const submit = async () => {
         </label>
       </fieldset>
 
-      <div class="field">
-        <label for="tx-note">Catatan (opsional)</label>
+      <FormField id="tx-note" label="Catatan (opsional)">
         <input id="tx-note" v-model="form.note" class="input" maxlength="255" />
-      </div>
+      </FormField>
 
       <div class="foot">
         <button type="button" class="btn" @click="emit('close')">Batal</button>
