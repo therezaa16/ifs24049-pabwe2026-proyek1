@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { resolveRedirect, validateLoginForm, validateRegisterForm } from '@/features/auth/domain/auth.validators.js';
 import {
-  filterTransactions, isLockedWish, presentAmount
+  filterTransactions, isLockedWish
 } from '@/features/transactions/domain/transaction.model.js';
+import { presentAmount } from '@/features/transactions/presentation/transaction.presenter.js';
 import { validateTransactionForm } from '@/features/transactions/domain/transaction.validators.js';
 import {
   calculateAverageScore, isPassing, isPresetAllowed, scaledSeconds, wishesForMission
