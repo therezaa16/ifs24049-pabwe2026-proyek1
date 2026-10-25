@@ -46,6 +46,7 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       globals: true,
       include: ['tests/**/*.test.js'],
+      setupFiles: ['./tests/setup.js'],
       coverage: {
         provider: 'v8',
         // lcov dipakai SonarQube (coverage/lcov.info)

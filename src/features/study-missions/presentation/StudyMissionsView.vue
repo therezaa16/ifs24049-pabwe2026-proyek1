@@ -7,6 +7,7 @@ import { useToast } from '@/shared/composables/useToast.js';
 import { useTransactionsStore } from '@/features/transactions/application/transactions.store.js';
 import { useMissionsStore } from '../application/missions.store.js';
 import { wishesForMission } from '../domain/mission.model.js';
+import AppIcon from '@/shared/components/AppIcon.vue';
 import ActiveRecallPanel from './ActiveRecallPanel.vue';
 import MissionHistory from './MissionHistory.vue';
 import PomodoroPanel from './PomodoroPanel.vue';
@@ -71,11 +72,11 @@ onMounted(load);
   <section class="space-y-8">
     <header class="head space-y-2">
       <div class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/15">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-600/15">
           <AppIcon name="timer" :size="18" class="text-white" />
         </div>
         <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-violet-500">Misi Belajar</p>
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-brand-600">Misi Belajar</p>
           <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mt-1">Buka keinginan lewat belajar</h1>
         </div>
       </div>
@@ -95,7 +96,7 @@ onMounted(load);
       <!-- Main Mission Workbench -->
       <div class="panel workbench lg:col-span-7 space-y-6">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-violet-500">Ruang misi</p>
+          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand-600">Ruang misi</p>
           <h2 class="panel-title text-lg font-extrabold text-slate-900 mt-1">Pilih jenis misi</h2>
           <p class="panel-hint text-sm text-slate-500">Sesuaikan dengan waktu dan gaya belajarmu untuk membuka keinginan yang dituju.</p>
         </div>
@@ -107,7 +108,7 @@ onMounted(load);
             type="button"
             role="tab"
             class="tab py-2.5 text-sm font-semibold rounded-2xl transition-all"
-            :class="activeType === type ? 'on bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-lg shadow-violet-500/15' : 'text-slate-600 hover:text-slate-900'"
+            :class="activeType === type ? 'on bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-lg shadow-brand-600/15' : 'text-slate-600 hover:text-slate-900'"
             :aria-selected="activeType === type"
             @click="selectType(type)"
           >

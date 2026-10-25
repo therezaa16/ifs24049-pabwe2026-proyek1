@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, ref, useId } from 'vue';
+import { onBeforeUnmount, onMounted, ref, useId } from 'vue';
 import AppIcon from './AppIcon.vue';
 
 defineProps({
@@ -10,94 +10,40 @@ const emit = defineEmits(['close']);
 
 const dialog = ref(null);
 const titleId = useId();
-let previouslyFocused = null;
 
-const focusableElements = () => {
-  if (!dialog.value) return [];
-
-  return [...dialog.value.querySelectorAll(
-    'a[href], button:not(:disabled), input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])'
-  )].filter((element) => !element.hasAttribute('hidden') && element.getAttribute('aria-hidden') !== 'true');
-};
-
-const onKeydown = (event) => {
-  if (event.key === 'Escape') {
-    event.preventDefault();
-    emit('close');
-    return;
-  }
-
-  if (event.key !== 'Tab') return;
-
-  const focusable = focusableElements();
-  if (focusable.length === 0) {
-    event.preventDefault();
-    dialog.value?.focus();
-    return;
-  }
-
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-  if (event.shiftKey && (document.activeElement === first || !dialog.value.contains(document.activeElement))) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && (document.activeElement === last || !dialog.value.contains(document.activeElement))) {
-    event.preventDefault();
-    first.focus();
-  }
-};
-
-onMounted(async () => {
-  previouslyFocused = document.activeElement;
-  document.addEventListener('keydown', onKeydown);
-  await nextTick();
-  const firstFocusable = focusableElements()[0];
-  (firstFocusable || dialog.value)?.focus();
+onMounted(() => {
+  dialog.value.showModal();
 });
 
 onBeforeUnmount(() => {
-  document.removeEventListener('keydown', onKeydown);
-  if (previouslyFocused?.isConnected) previouslyFocused.focus();
+  dialog.value.close();
 });
 </script>
 
 <template>
-  <div class="backdrop" @mousedown.self="emit('close')">
-    <dialog
-      ref="dialog"
-      open
-      class="dialog"
-      :class="{ 'dialog-wide': wide }"
-      aria-modal="true"
-      :aria-labelledby="titleId"
-      tabindex="-1"
-    >
-      <header class="dialog-head">
-        <h2 :id="titleId">{{ title }}</h2>
-        <button type="button" class="btn btn-quiet btn-small" aria-label="Tutup" @click="emit('close')">
-          <AppIcon name="close" />
-        </button>
-      </header>
-      <div class="dialog-body"><slot /></div>
-    </dialog>
-  </div>
+  <dialog
+    ref="dialog"
+    class="dialog"
+    :class="{ 'dialog-wide': wide }"
+    :aria-labelledby="titleId"
+    @cancel.prevent="emit('close')"
+    @click.self="emit('close')"
+  >
+    <header class="dialog-head">
+      <h2 :id="titleId">{{ title }}</h2>
+      <button type="button" class="btn btn-quiet btn-small" aria-label="Tutup" autofocus @click="emit('close')">
+        <AppIcon name="close" />
+      </button>
+    </header>
+    <div class="dialog-body"><slot /></div>
+  </dialog>
 </template>
 
 <style scoped>
-.backdrop {
+.dialog {
   position: fixed;
   inset: 0;
-  z-index: 50;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-  background: radial-gradient(circle, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
-  backdrop-filter: blur(6px);
-}
-.dialog {
-  position: relative;
-  inset: auto;
-  margin: 0;
+  margin: auto;
   width: min(30rem, 100%);
   max-width: none;
   max-height: calc(100vh - 2rem);
@@ -108,6 +54,10 @@ onBeforeUnmount(() => {
   border-radius: var(--radius-l);
   box-shadow: var(--shadow-elevated);
   animation: dialog-in 0.25s ease-out;
+}
+.dialog::backdrop {
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+  backdrop-filter: blur(6px);
 }
 .dialog-wide { width: min(38rem, 100%); }
 .dialog:focus { outline: none; }

@@ -33,81 +33,43 @@ beforeEach(() => {
   useMissionsStore().settings = { ...settings };
   missionsApi.history.mockResolvedValue({ missions: [] });
 });
-afterEach(() => vi.useRealTimers());
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 describe('BaseModal', () => {
-  it('mengikat judul secara semantik dan menjaga fokus keyboard di dalam modal', async () => {
+  it('membuka dialog native, mengikat judul, dan memfokuskan kontrol awal', () => {
     const wrapper = mount(BaseModal, {
       props: { title: 'Judul dialog' },
-      slots: { default: '<button id="first">Pertama</button><button id="middle">Tengah</button><button id="last">Terakhir</button><button hidden>Tersembunyi</button><button aria-hidden="true">Tidak terlihat</button>' },
       attachTo: document.body
     });
-    await flushPromises();
 
     const dialog = wrapper.find('dialog');
-    const middle = wrapper.find('#middle').element;
-    const last = wrapper.find('#last').element;
     const close = wrapper.find('button[aria-label="Tutup"]').element;
     expect(dialog.attributes('aria-labelledby')).toBe(wrapper.find('h2').attributes('id'));
+    expect(dialog.attributes('open')).toBeDefined();
     expect(document.activeElement).toBe(close);
-
-    middle.focus();
-    const forwardWithinModal = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
-    document.dispatchEvent(forwardWithinModal);
-    expect(forwardWithinModal.defaultPrevented).toBe(false);
-
-    middle.focus();
-    const backwardWithinModal = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
-    document.dispatchEvent(backwardWithinModal);
-    expect(backwardWithinModal.defaultPrevented).toBe(false);
-
-    last.focus();
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
-    expect(document.activeElement).toBe(close);
-
-    close.focus();
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
-    expect(document.activeElement).toBe(last);
 
     wrapper.unmount();
   });
 
-  it('mengembalikan fokus ke dalam dialog jika fokus keluar dan menangani dialog tanpa kontrol fokus', async () => {
-    const opener = document.createElement('button');
-    document.body.appendChild(opener);
-    opener.focus();
-    const wrapper = mount(BaseModal, { props: { title: 'Dialog kosong' }, attachTo: document.body });
-    await flushPromises();
-    const dialog = wrapper.find('dialog').element;
-    wrapper.find('button[aria-label="Tutup"]').element.remove();
-
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
-    expect(document.activeElement).toBe(dialog);
-
-    opener.focus();
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
-    expect(document.activeElement).toBe(dialog);
-
-    wrapper.unmount();
-    opener.remove();
-  });
-
-  it('menutup lewat Escape, backdrop, dan tombol tutup; mengabaikan tombol lain', async () => {
+  it('menutup lewat Escape, backdrop, dan tombol tutup', async () => {
     const opener = document.createElement('button');
     document.body.appendChild(opener);
     opener.focus();
     const wrapper = mount(BaseModal, { props: { title: 'Judul', wide: true }, slots: { default: '<p>isi</p>' }, attachTo: document.body });
-    await flushPromises();
+    const dialog = wrapper.find('dialog');
     expect(wrapper.find('.dialog-wide').exists()).toBe(true);
 
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    const otherEvent = new Event('other', { cancelable: true });
+    dialog.element.dispatchEvent(otherEvent);
     expect(wrapper.emitted('close')).toBeUndefined();
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    const cancelEvent = new Event('cancel', { cancelable: true });
+    dialog.element.dispatchEvent(cancelEvent);
+    expect(cancelEvent.defaultPrevented).toBe(true);
     expect(wrapper.emitted('close')).toHaveLength(1);
 
-    await wrapper.find('.dialog').trigger('mousedown');
-    expect(wrapper.emitted('close')).toHaveLength(1);
-    await wrapper.find('.backdrop').trigger('mousedown');
+    await dialog.trigger('click');
     expect(wrapper.emitted('close')).toHaveLength(2);
     await wrapper.find('button[aria-label="Tutup"]').trigger('click');
     expect(wrapper.emitted('close')).toHaveLength(3);
@@ -117,19 +79,20 @@ describe('BaseModal', () => {
     opener.remove();
   });
 
-  it('aman bila dilepas sebelum fokus awal dipasang', () => {
+  it('menutup dialog native saat komponennya dilepas', () => {
     const wrapper = mount(BaseModal, { props: { title: 'Cepat' } });
     const dialog = wrapper.find('.dialog').element;
+    expect(dialog.open).toBe(true);
     wrapper.unmount();
     expect(dialog.isConnected).toBe(false);
+    expect(dialog.open).toBe(false);
   });
 
-  it('tidak mencoba memulihkan fokus ke pemicu yang sudah dilepas dari dokumen', async () => {
+  it('tidak mencoba memulihkan fokus ke pemicu yang sudah dilepas dari dokumen', () => {
     const opener = document.createElement('button');
     document.body.appendChild(opener);
     opener.focus();
     const wrapper = mount(BaseModal, { props: { title: 'Judul' }, attachTo: document.body });
-    await flushPromises();
     opener.remove();
 
     expect(() => wrapper.unmount()).not.toThrow();
@@ -313,9 +276,9 @@ describe('ActiveRecallPanel (cabang tambahan)', () => {
     missionsApi.start.mockResolvedValue({ session: { id: 3, subject: 'Deck A', required_seconds: 5 } });
     const wrapper = mountPanel({ wish: { id: 7 } });
     expect(wrapper.text()).toContain('0 kartu');
-    await wrapper.findAll('.deck')[1].trigger('click');
+    await wrapper.findAll('input[name="deck"]')[1].setValue();
     expect(wrapper.findAll('.deck')[1].classes()).toContain('on');
-    await wrapper.findAll('input[name="deck"]')[0].setValue(true);
+    await wrapper.findAll('input[name="deck"]')[0].setValue();
     expect(wrapper.vm.selectedDeckId).toBe(1);
     expect(wrapper.vm.currentCard).toBeNull();
 
@@ -353,7 +316,7 @@ describe('ActiveRecallPanel (cabang tambahan)', () => {
     seed();
     missionsApi.deleteDeck.mockResolvedValue({});
     const wrapper = mountPanel();
-    const trash = () => wrapper.find('button[title="Hapus Materi Ini"]');
+    const trash = () => wrapper.find('button[aria-label="Hapus materi Deck A"]');
 
     await trash().trigger('click');
     expect(wrapper.text()).toContain('Hapus Materi Kuis?');
@@ -375,14 +338,14 @@ describe('ActiveRecallPanel (cabang tambahan)', () => {
     seed([deckA]);
     missionsApi.deleteDeck.mockRejectedValueOnce(new ApiError('Gagal hapus', 500));
     const wrapper = mountPanel();
-    await wrapper.find('button[title="Hapus Materi Ini"]').trigger('click');
+    await wrapper.find('button[aria-label="Hapus materi Deck A"]').trigger('click');
     await button(wrapper, 'Hapus').trigger('click');
     await flushPromises();
     expect(useMissionsStore().decks).toHaveLength(1);
 
     wrapper.vm.selectedDeckId = 99;
     missionsApi.deleteDeck.mockResolvedValueOnce({});
-    await wrapper.find('button[title="Hapus Materi Ini"]').trigger('click');
+    await wrapper.find('button[aria-label="Hapus materi Deck A"]').trigger('click');
     await button(wrapper, 'Hapus').trigger('click');
     await flushPromises();
     expect(wrapper.vm.selectedDeckId).toBe(99);
@@ -391,7 +354,7 @@ describe('ActiveRecallPanel (cabang tambahan)', () => {
     wrapper.vm.selectedDeckId = 1;
     await wrapper.vm.$nextTick();
     missionsApi.deleteDeck.mockResolvedValueOnce({});
-    await wrapper.find('button[title="Hapus Materi Ini"]').trigger('click');
+    await wrapper.find('button[aria-label="Hapus materi Deck A"]').trigger('click');
     await button(wrapper, 'Hapus').trigger('click');
     await flushPromises();
     expect(wrapper.vm.selectedDeckId).toBeNull();

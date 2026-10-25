@@ -10,6 +10,7 @@ import { useCountdown } from '../application/useCountdown.js';
 import { useMissionsStore } from '../application/missions.store.js';
 import { RATINGS, calculateAverageScore, isPassing } from '../domain/mission.model.js';
 import AiMaterialModal from './AiMaterialModal.vue';
+import DeckSelector from './DeckSelector.vue';
 import StudyMaterialModal from './StudyMaterialModal.vue';
 
 const props = defineProps({ wish: { type: Object, default: null } });
@@ -141,49 +142,12 @@ const claim = async () => {
         </button>
       </div>
 
-      <!-- Decks Selection Fieldset -->
-      <fieldset class="decks w-full border-0 m-0 p-0 space-y-2">
-        <legend class="label block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Pilih materi kartu</legend>
-        <div
-          v-for="item in store.decks"
-          :key="item.id"
-          class="deck flex items-start justify-between p-3.5 rounded-xl border transition-all cursor-pointer bg-white"
-          :class="selectedDeckId === item.id ? 'on border-brand-600 bg-brand-50/50 shadow-xs' : 'border-slate-200 hover:border-slate-300'"
-          @click="selectedDeckId = item.id"
-        >
-          <label class="flex items-start gap-3 cursor-pointer flex-1">
-            <input v-model="selectedDeckId" type="radio" name="deck" :value="item.id" class="mt-1 accent-brand-600" />
-            <span>
-              <strong class="text-sm font-bold text-slate-900 block">{{ item.title }}</strong>
-              <small class="text-xs text-slate-500 block mt-0.5">
-                <span class="font-semibold text-brand-700">{{ item.subject }}</span> · {{ item.cards?.length || 0 }} kartu
-                <template v-if="item.description"> · {{ item.description }}</template>
-              </small>
-            </span>
-          </label>
-
-          <div class="flex items-center gap-1.5 shrink-0 ml-2" @click.stop>
-            <button
-              v-if="item.content"
-              type="button"
-              class="px-2 py-1 text-[11px] font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-1"
-              title="Baca Catatan Pembelajaran Lengkap"
-              @click="openDeckMaterial(item)"
-            >
-              📖 Baca Materi
-            </button>
-            <button
-              v-if="item.user_id"
-              type="button"
-              class="p-1 text-slate-400 hover:text-rose-600 rounded-lg transition-colors"
-              title="Hapus Materi Ini"
-              @click="promptDeleteDeck(item)"
-            >
-              <AppIcon name="trash" :size="15" />
-            </button>
-          </div>
-        </div>
-      </fieldset>
+      <DeckSelector
+        v-model="selectedDeckId"
+        :decks="store.decks"
+        @read="openDeckMaterial"
+        @delete="promptDeleteDeck"
+      />
 
       <p class="rule text-xs text-slate-500 leading-relaxed">
         Lulus jika skor rata-rata minimal <strong class="num font-bold text-slate-800">{{ store.settings.passingScore }}</strong>. Sesi juga butuh waktu baca minimal {{ store.settings.secondsPerCard }} detik per kartu.
@@ -329,8 +293,6 @@ const claim = async () => {
 
 <style scoped>
 .recall { display: grid; gap: 1rem; justify-items: start; }
-.decks { border: 0; margin: 0; padding: 0; display: grid; gap: 0.5rem; width: 100%; }
-.deck.on { border-color: var(--cobalt); background: var(--cobalt-wash); }
 .score { font-family: var(--font-display); }
 .result.pass { border-color: var(--moss); background: var(--moss-wash); }
 </style>

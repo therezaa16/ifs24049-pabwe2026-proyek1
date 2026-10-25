@@ -747,6 +747,7 @@ describe('StudyMissionsView', () => {
 
   it('memilih jenis misi dan keinginan', async () => {
     const wrapper = await mountView();
+    expect(wrapper.findComponent({ name: 'AppIcon' }).exists()).toBe(true);
     await wrapper.find('#wish').setValue('1');
     await wrapper.findAll('button').find((b) => b.text().includes('Active Recall')).trigger('click');
     expect(wrapper.find('#wish').element.value).toBe('');
