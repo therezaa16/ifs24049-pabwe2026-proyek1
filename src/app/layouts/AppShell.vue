@@ -148,21 +148,21 @@ onMounted(() => auth.restoreSession());
 
 <style scoped>
 .nav-link.active {
-  color: #312e81;
-  background: #eef2ff;
+  color: rgb(var(--brand-900));
+  background: var(--cobalt-wash);
 }
 .profile-link:hover,
 .profile-link.router-link-active {
-  border-color: #c7d2fe;
-  background: #eef2ff;
+  border-color: rgb(var(--brand-200));
+  background: var(--cobalt-wash);
 }
 .profile-arrow {
   transform: rotate(-45deg);
 }
 .tab-link.active {
-  color: #4f46e5;
+  color: var(--cobalt);
 }
 .tab-link.active :deep(svg) {
-  color: #4f46e5;
+  color: var(--cobalt);
 }
 </style>

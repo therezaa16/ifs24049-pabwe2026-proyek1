@@ -5,7 +5,7 @@ import { formatDate, formatRupiah } from '@/core/format/formatters.js';
 import { MISSION_LABELS } from '@/shared/domain/mission-types.js';
 import AppIcon from '@/shared/components/AppIcon.vue';
 import { isLockedWish } from '../domain/transaction.model.js';
-import { STATUS_LABELS, STATUS_TONES, TYPE_LABELS, presentAmount } from './transaction.presenter.js';
+import { STATUS_LABELS, STATUS_TONES, TYPE_LABELS, presentAmount } from '@/shared/presentation/transaction.presenter.js';
 
 const props = defineProps({ transaction: { type: Object, required: true } });
 defineEmits(['cancel', 'remove']);

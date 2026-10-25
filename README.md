@@ -20,7 +20,8 @@ npm run build
 src/
   app/        router, layout, gaya global, sesi
   core/       http client, storage, format (tanpa logika bisnis)
-  shared/     komponen & composable lintas fitur (BaseModal, ConfirmModal, FormField, useToast)
+  shared/     lintas fitur: components (BaseModal, ConfirmModal, FormField), composables (useToast, useFormSubmit),
+              domain (tipe & status transaksi), presentation (label & nada transaksi)
   features/<fitur>/
     domain/          aturan murni (konstanta, validasi, perhitungan) — tanpa Vue, tanpa teks tampilan
     application/     store Pinia dan composable (use-case)
@@ -35,6 +36,10 @@ Aturan dependensi: `presentation → application → infrastructure`, dan semuan
 - Token JWT disimpan di `localStorage` (backend memakai header Bearer). Risiko XSS dikurangi dengan
   Content-Security-Policy di `vercel.json`, tidak memakai `v-html`, dan token dihapus saat server membalas 401.
 - Seluruh akses storage dibungkus `try/catch`.
+- Pesan error form dihubungkan ke input lewat `aria-describedby` (komponen `FormField`).
+
+## Desain
+Semua warna memakai design token di `src/app/styles/tokens.css`; komponen tidak menulis kode warna langsung.
 
 ## CI/CD
 `Jenkinsfile` menjalankan: install → tes + coverage → SonarQube (quality gate) → Trivy → build → deploy.

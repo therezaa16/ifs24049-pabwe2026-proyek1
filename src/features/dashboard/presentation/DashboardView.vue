@@ -6,7 +6,7 @@ import { MISSION_LABELS } from '@/shared/domain/mission-types.js';
 import AppIcon from '@/shared/components/AppIcon.vue';
 import PadlockMark from '@/shared/components/PadlockMark.vue';
 import { useAuthStore } from '@/features/auth/application/auth.store.js';
-import { STATUS_LABELS, STATUS_TONES } from '@/features/transactions/presentation/transaction.presenter.js';
+import { STATUS_LABELS, STATUS_TONES } from '@/shared/presentation/transaction.presenter.js';
 import { useDashboardStore } from '../application/dashboard.store.js';
 import { budgetUsage, disciplineLabel, firstName } from '../domain/dashboard.model.js';
 import AllocationChart from './charts/AllocationChart.vue';
@@ -339,15 +339,15 @@ onMounted(load);
   appearance: none;
   border: 0;
 }
-.bar::-webkit-progress-bar { background: #f1f5f9; }
-.bar-ok::-webkit-progress-value { background: linear-gradient(90deg, #4f46e5, #7c3aed); }
-.bar-warning::-webkit-progress-value { background: linear-gradient(90deg, #fbbf24, #f97316); }
-.bar-danger::-webkit-progress-value { background: linear-gradient(90deg, #f43f5e, #dc2626); }
-.bar::-moz-progress-bar { background: #4f46e5; }
-.bar-warning::-moz-progress-bar { background: #d97706; }
-.bar-danger::-moz-progress-bar { background: #dc2626; }
+.bar::-webkit-progress-bar { background: var(--surface-sunken); }
+.bar-ok::-webkit-progress-value { background: linear-gradient(90deg, var(--cobalt), var(--violet-deep)); }
+.bar-warning::-webkit-progress-value { background: linear-gradient(90deg, var(--amber-400), var(--orange-500)); }
+.bar-danger::-webkit-progress-value { background: linear-gradient(90deg, var(--rose-500), var(--rose)); }
+.bar::-moz-progress-bar { background: var(--cobalt); }
+.bar-warning::-moz-progress-bar { background: rgb(var(--brass-600)); }
+.bar-danger::-moz-progress-bar { background: var(--rose); }
 .ring {
-  background: conic-gradient(#22c55e var(--score, 0%), #e5e7eb 0);
+  background: conic-gradient(var(--success) var(--score, 0%), var(--line) 0);
 }
 .recent { list-style: none; margin: 0; padding: 0; }
 </style>

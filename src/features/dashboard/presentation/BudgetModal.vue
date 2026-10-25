@@ -36,8 +36,8 @@ const save = async () => {
 <template>
   <BaseModal title="Atur anggaran bulanan" @close="emit('close')">
     <form novalidate @submit.prevent="save">
-      <FormField id="budget-input" label="Anggaran per bulan (Rp)" :error="error" hint="Isi 0 untuk menonaktifkan perhitungan sisa anggaran." v-slot="{ invalid }">
-        <input id="budget-input" v-model="value" class="input num" type="number" min="0" step="10000" inputmode="numeric" :aria-invalid="invalid" />
+      <FormField id="budget-input" label="Anggaran per bulan (Rp)" :error="error" hint="Isi 0 untuk menonaktifkan perhitungan sisa anggaran." v-slot="{ invalid, describedBy }">
+        <input id="budget-input" v-model="value" class="input num" type="number" min="0" step="10000" inputmode="numeric" :aria-invalid="invalid" :aria-describedby="describedBy" />
       </FormField>
       <div class="foot">
         <button type="button" class="btn" @click="emit('close')">Batal</button>

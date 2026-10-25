@@ -1,15 +1,6 @@
-export const TRANSACTION_TYPES = Object.freeze({
-  INCOME: 'pemasukan',
-  NEED: 'kebutuhan',
-  WANT: 'keinginan'
-});
+import { TRANSACTION_STATUSES, TRANSACTION_TYPES } from '@/shared/domain/transaction-types.js';
 
-export const TRANSACTION_STATUSES = Object.freeze({
-  ACTIVE: 'aktif',
-  LOCKED: 'terkunci',
-  UNLOCKED: 'terbuka',
-  CANCELLED: 'dibatalkan'
-});
+export { TRANSACTION_STATUSES, TRANSACTION_TYPES };
 
 export const CATEGORIES = Object.freeze([
   'Makanan & Minuman',

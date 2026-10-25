@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { STATUS_LABELS, STATUS_TONES, TYPE_LABELS, presentAmount } from '@/features/transactions/presentation/transaction.presenter.js';
+import { STATUS_LABELS, STATUS_TONES, TYPE_LABELS, presentAmount } from '@/shared/presentation/transaction.presenter.js';
 
 const want = (status) => ({ type: 'keinginan', status });
 

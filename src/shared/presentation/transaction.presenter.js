@@ -1,4 +1,4 @@
-import { TRANSACTION_STATUSES, TRANSACTION_TYPES } from '../domain/transaction.model.js';
+import { TRANSACTION_STATUSES, TRANSACTION_TYPES } from '@/shared/domain/transaction-types.js';
 
 // Berkas ini khusus presentasi: label teks dan nada tampilan untuk transaksi.
 // Domain hanya mengenal tipe dan status, bukan cara menampilkannya.

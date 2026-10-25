@@ -8,7 +8,7 @@ import PadlockMark from '@/shared/components/PadlockMark.vue';
 import { useToast } from '@/shared/composables/useToast.js';
 import { useTransactionsStore } from '../application/transactions.store.js';
 import { TRANSACTION_STATUSES, TRANSACTION_TYPES } from '../domain/transaction.model.js';
-import { STATUS_LABELS, TYPE_LABELS } from './transaction.presenter.js';
+import { STATUS_LABELS, TYPE_LABELS } from '@/shared/presentation/transaction.presenter.js';
 import TransactionFormModal from './TransactionFormModal.vue';
 import TransactionRow from './TransactionRow.vue';
 

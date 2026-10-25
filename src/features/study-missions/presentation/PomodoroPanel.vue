@@ -146,7 +146,7 @@ const claim = async () => {
 .presets { display: flex; flex-wrap: wrap; gap: 0.5rem; border: 0; margin: 0; padding: 0; }
 .preset { padding: 0.5rem 1rem; border: 1.5px solid var(--ink); border-radius: var(--radius-s); background: var(--surface); }
 .preset strong { font-family: var(--font-display); font-size: 1.2rem; }
-.preset.on { background: var(--cobalt); color: #fff; }
+.preset.on { background: var(--cobalt); color: var(--surface); }
 .preset:disabled { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
 .session { display: grid; justify-items: center; gap: 0.75rem; padding: 0.5rem 0; text-align: center; }
 .ring-wrap { position: relative; width: min(15rem, 70vw); aspect-ratio: 1; }
