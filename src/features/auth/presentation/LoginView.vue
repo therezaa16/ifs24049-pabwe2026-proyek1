@@ -1,24 +1,36 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { fieldErrorsOf } from '@/core/http/api-error.js';
 import { validateLoginForm, resolveRedirect } from '../domain/auth.validators.js';
 import { useAuthStore } from '../application/auth.store.js';
 import AuthLayout from './AuthLayout.vue';
-import FormField from '@/shared/components/FormField.vue';
-import { useFormSubmit } from '@/shared/composables/useFormSubmit.js';
 
 const auth = useAuthStore();
 const router = useRouter();
 const route = useRoute();
 
 const form = reactive({ email: '', password: '' });
-const { errors, formError, submitting, submit } = useFormSubmit({
-  validate: () => validateLoginForm(form),
-  action: async () => {
+const errors = ref({});
+const formError = ref('');
+const submitting = ref(false);
+
+const submit = async () => {
+  formError.value = '';
+  errors.value = validateLoginForm(form);
+  if (Object.keys(errors.value).length > 0) return;
+
+  submitting.value = true;
+  try {
     await auth.login(form);
     router.replace(resolveRedirect(route.query.redirect));
+  } catch (error) {
+    formError.value = error.message;
+    errors.value = fieldErrorsOf(error);
+  } finally {
+    submitting.value = false;
   }
-});
+};
 </script>
 
 <template>
@@ -32,13 +44,17 @@ const { errors, formError, submitting, submit } = useFormSubmit({
 
       <p v-if="formError" class="form-error" role="alert">{{ formError }}</p>
 
-      <FormField id="username" label="Email" :error="errors.email" v-slot="{ invalid, describedBy }">
-        <input id="username" name="username" v-model="form.email" class="input" type="email" autocomplete="email" :aria-invalid="invalid" :aria-describedby="describedBy" />
-      </FormField>
+      <div class="field">
+        <label for="username">Email</label>
+        <input id="username" name="username" v-model="form.email" class="input" type="email" autocomplete="email" :aria-invalid="Boolean(errors.email)" />
+        <span v-if="errors.email" class="field-error">{{ errors.email }}</span>
+      </div>
 
-      <FormField id="password" label="Password" :error="errors.password" v-slot="{ invalid, describedBy }">
-        <input id="password" v-model="form.password" class="input" type="password" autocomplete="current-password" :aria-invalid="invalid" :aria-describedby="describedBy" />
-      </FormField>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" v-model="form.password" class="input" type="password" autocomplete="current-password" :aria-invalid="Boolean(errors.password)" />
+        <span v-if="errors.password" class="field-error">{{ errors.password }}</span>
+      </div>
 
       <button id="btn-submit" type="submit" class="btn btn-primary btn-block" :disabled="submitting">
         {{ submitting ? 'Memproses…' : 'Masuk' }}
@@ -50,7 +66,7 @@ const { errors, formError, submitting, submit } = useFormSubmit({
 </template>
 
 <style scoped>
-.card { width: min(28rem, 100%); background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, var(--surface) 100%); border: 1px solid var(--line); border-radius: var(--radius-l); padding: clamp(1.8rem, 4vw, 2.6rem); box-shadow: var(--shadow-elevated); display: grid; gap: 1rem; }
+.card { width: min(28rem, 100%); background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, #fff 100%); border: 1px solid var(--line); border-radius: var(--radius-l); padding: clamp(1.8rem, 4vw, 2.6rem); box-shadow: var(--shadow-elevated); display: grid; gap: 1rem; }
 .card-head { display: grid; gap: 0.4rem; }
 .card-kicker { text-transform: uppercase; letter-spacing: 0.3em; font-size: 0.7rem; color: var(--cobalt); font-weight: 700; }
 h1 { font-size: clamp(2rem, 4vw, 2.8rem); }

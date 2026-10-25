@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { resolveRedirect, validateLoginForm, validateRegisterForm } from '@/features/auth/domain/auth.validators.js';
 import {
-  filterTransactions, isLockedWish
+  filterTransactions, isLockedWish, presentAmount
 } from '@/features/transactions/domain/transaction.model.js';
 import { validateTransactionForm } from '@/features/transactions/domain/transaction.validators.js';
 import {
@@ -47,6 +47,14 @@ describe('model transaksi', () => {
     expect(filterTransactions(items, { status: 'aktif' })).toHaveLength(1);
   });
 
+  it('menampilkan tanda nominal sesuai kondisi uang', () => {
+    expect(presentAmount({ type: 'pemasukan', status: 'aktif' })).toEqual({ prefix: '+', tone: 'positive' });
+    expect(presentAmount(want('terkunci'))).toEqual({ prefix: '', tone: 'pending' });
+    expect(presentAmount(want('dibatalkan'))).toEqual({ prefix: '', tone: 'muted' });
+    expect(presentAmount(want('terbuka'))).toEqual({ prefix: '−', tone: 'negative' });
+    expect(presentAmount({ type: 'kebutuhan', status: 'aktif' }).tone).toBe('negative');
+  });
+
   it('validasi form transaksi', () => {
     expect(validateTransactionForm({ title: 'Kopi', amount: '5000', category: 'Hiburan' })).toEqual({});
     expect(Object.keys(validateTransactionForm({ title: 'K', amount: '0', category: ' ' }))).toEqual(['title', 'amount', 'category']);
@@ -75,10 +83,10 @@ describe('model misi', () => {
 
 describe('model dashboard', () => {
   it('pemakaian anggaran', () => {
-    expect(budgetUsage({ monthlyBudget: 0, monthlySpending: 5 })).toMatchObject({ hasBudget: false, level: 'none' });
-    expect(budgetUsage({ monthlyBudget: 100, monthlySpending: 50 })).toMatchObject({ percent: 50, level: 'ok', over: false });
-    expect(budgetUsage({ monthlyBudget: 100, monthlySpending: 85 }).level).toBe('warning');
-    expect(budgetUsage({ monthlyBudget: 100, monthlySpending: 150 })).toMatchObject({ percent: 100, level: 'danger', over: true });
+    expect(budgetUsage({ monthlyBudget: 0, monthlySpending: 5 })).toMatchObject({ hasBudget: false, tone: 'none' });
+    expect(budgetUsage({ monthlyBudget: 100, monthlySpending: 50 })).toMatchObject({ percent: 50, tone: 'ok', over: false });
+    expect(budgetUsage({ monthlyBudget: 100, monthlySpending: 85 }).tone).toBe('warning');
+    expect(budgetUsage({ monthlyBudget: 100, monthlySpending: 150 })).toMatchObject({ percent: 100, tone: 'danger', over: true });
     expect(budgetUsage({ monthlyBudget: 100, monthlySpending: -10 }).percent).toBe(0);
   });
 

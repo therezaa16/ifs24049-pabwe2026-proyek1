@@ -49,7 +49,7 @@ onBeforeUnmount(() => {
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
   color: var(--ink);
-  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, var(--surface) 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, #fff 100%);
   border: 1px solid var(--line);
   border-radius: var(--radius-l);
   box-shadow: var(--shadow-elevated);

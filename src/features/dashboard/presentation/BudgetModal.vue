@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import BaseModal from '@/shared/components/BaseModal.vue';
 import { useToast } from '@/shared/composables/useToast.js';
 import { useAuthStore } from '@/features/auth/application/auth.store.js';
-import FormField from '@/shared/components/FormField.vue';
 
 const props = defineProps({ current: { type: Number, default: 0 } });
 const emit = defineEmits(['close', 'saved']);
@@ -36,9 +35,12 @@ const save = async () => {
 <template>
   <BaseModal title="Atur anggaran bulanan" @close="emit('close')">
     <form novalidate @submit.prevent="save">
-      <FormField id="budget-input" label="Anggaran per bulan (Rp)" :error="error" hint="Isi 0 untuk menonaktifkan perhitungan sisa anggaran." v-slot="{ invalid, describedBy }">
-        <input id="budget-input" v-model="value" class="input num" type="number" min="0" step="10000" inputmode="numeric" :aria-invalid="invalid" :aria-describedby="describedBy" />
-      </FormField>
+      <div class="field">
+        <label for="budget-input">Anggaran per bulan (Rp)</label>
+        <input id="budget-input" v-model="value" class="input num" type="number" min="0" step="10000" inputmode="numeric" :aria-invalid="Boolean(error)" />
+        <span v-if="error" class="field-error">{{ error }}</span>
+        <span v-else class="field-hint">Isi 0 untuk menonaktifkan perhitungan sisa anggaran.</span>
+      </div>
       <div class="foot">
         <button type="button" class="btn" @click="emit('close')">Batal</button>
         <button type="submit" class="btn btn-primary" :disabled="saving">{{ saving ? 'Menyimpan…' : 'Simpan' }}</button>

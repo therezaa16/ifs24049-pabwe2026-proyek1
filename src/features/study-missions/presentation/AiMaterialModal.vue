@@ -1,5 +1,4 @@
 <script setup>
-import { errorMessageOf } from '@/core/http/api-error.js';
 import { ref } from 'vue';
 import AppIcon from '@/shared/components/AppIcon.vue';
 import BaseModal from '@/shared/components/BaseModal.vue';
@@ -73,7 +72,7 @@ const handleGenerate = async () => {
     emit('created', result.deck);
     emit('close');
   } catch (err) {
-    errorMsg.value = errorMessageOf(err, 'Gagal menghasilkan kuis dengan AI. Coba lagi.');
+    errorMsg.value = err.message || 'Gagal menghasilkan kuis dengan AI. Coba lagi.';
   } finally {
     busy.value = false;
   }

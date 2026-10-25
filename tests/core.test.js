@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { ApiError, errorMessageOf, fieldErrorsOf, remainingSecondsOf } from '@/core/http/api-error.js';
+import { ApiError, fieldErrorsOf } from '@/core/http/api-error.js';
 import { buildQuery, createHttpClient } from '@/core/http/http-client.js';
 import { tokenStorage } from '@/core/storage/token-storage.js';
 import {
@@ -125,19 +125,5 @@ describe('http client', () => {
     const client = createHttpClient({ baseUrl: '/api', getToken: () => null, onUnauthorized: vi.fn() });
     expect(await client.get('/ping')).toEqual({ ok: 1 });
     expect(spy).toHaveBeenCalled();
-  });
-});
-
-describe('helper error', () => {
-  it('remainingSecondsOf membaca sisa detik dari ApiError saja', () => {
-    expect(remainingSecondsOf(new ApiError('x', 400, { remaining_seconds: 7 }))).toBe(7);
-    expect(remainingSecondsOf(new ApiError('x', 400))).toBeNull();
-    expect(remainingSecondsOf(new Error('x'))).toBeNull();
-  });
-
-  it('errorMessageOf memakai pesan error atau cadangan', () => {
-    expect(errorMessageOf(new Error('gagal'), 'cadangan')).toBe('gagal');
-    expect(errorMessageOf(new Error(''), 'cadangan')).toBe('cadangan');
-    expect(errorMessageOf(undefined, 'cadangan')).toBe('cadangan');
   });
 });

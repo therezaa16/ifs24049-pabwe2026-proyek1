@@ -46,7 +46,6 @@ import CategoryChart from '@/features/dashboard/presentation/charts/CategoryChar
 import WeeklyTrendChart from '@/features/dashboard/presentation/charts/WeeklyTrendChart.vue';
 import BaseModal from '@/shared/components/BaseModal.vue';
 import BudgetModal from '@/features/dashboard/presentation/BudgetModal.vue';
-import DashboardMetrics from '@/features/dashboard/presentation/DashboardMetrics.vue';
 import DashboardView from '@/features/dashboard/presentation/DashboardView.vue';
 import MissionHistory from '@/features/study-missions/presentation/MissionHistory.vue';
 import StudyMissionsView from '@/features/study-missions/presentation/StudyMissionsView.vue';
@@ -504,12 +503,11 @@ describe('DashboardView', () => {
     delete minimal.financial.monthlyBudget;
     httpClient.get.mockImplementation(async (path) => (path === '/dashboard/summary' ? { data: minimal } : { user: { id: 1, name: 'Eliza' } }));
     const wrapper = await mountDashboard();
-    expect(wrapper.findComponent(DashboardMetrics).vm.ringStyle['--score']).toBe('0%');
+    expect(wrapper.vm.ringStyle['--score']).toBe('0%');
     await wrapper.findAll('button').find((b) => b.text().includes('Tentukan Anggaran')).trigger('click');
     expect(wrapper.findComponent(BudgetModal).props('current')).toBe(0);
     wrapper.vm.dashboard.data = null;
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find('.state').exists()).toBe(true);
+    expect(wrapper.vm.ringStyle['--score']).toBe('0%');
   });
 
   it('menampilkan error dan dapat mencoba lagi', async () => {

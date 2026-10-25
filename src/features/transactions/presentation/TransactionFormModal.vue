@@ -4,13 +4,10 @@ import { fieldErrorsOf } from '@/core/http/api-error.js';
 import { MISSION_LABELS, MISSION_TYPES } from '@/shared/domain/mission-types.js';
 import BaseModal from '@/shared/components/BaseModal.vue';
 import AppIcon from '@/shared/components/AppIcon.vue';
-import { CATEGORIES, TRANSACTION_TYPES } from '../domain/transaction.model.js';
-import { TYPE_LABELS } from '@/shared/presentation/transaction.presenter.js';
+import { CATEGORIES, TRANSACTION_TYPES, TYPE_LABELS } from '../domain/transaction.model.js';
 import { validateTransactionForm } from '../domain/transaction.validators.js';
 import { useTransactionsStore } from '../application/transactions.store.js';
 import { useToast } from '@/shared/composables/useToast.js';
-import FormField from '@/shared/components/FormField.vue';
-import { useFormSubmit } from '@/shared/composables/useFormSubmit.js';
 
 const emit = defineEmits(['close']);
 const store = useTransactionsStore();
@@ -24,18 +21,28 @@ const form = reactive({
   note: '',
   missionType: MISSION_TYPES.POMODORO
 });
+const errors = ref({});
+const submitting = ref(false);
+
 const isWant = computed(() => form.type === TRANSACTION_TYPES.WANT);
 const typeOptions = Object.values(TRANSACTION_TYPES);
 
-const { errors, submitting, submit } = useFormSubmit({
-  validate: () => validateTransactionForm(form),
-  action: async () => {
+const submit = async () => {
+  errors.value = validateTransactionForm(form);
+  if (Object.keys(errors.value).length > 0) return;
+
+  submitting.value = true;
+  try {
     const data = await store.create(form);
     data.isLocked ? toast.info(data.message) : toast.success(data.message);
     emit('close');
-  },
-  onServerError: (error) => toast.error(error.message)
-});
+  } catch (error) {
+    errors.value = fieldErrorsOf(error);
+    toast.error(error.message);
+  } finally {
+    submitting.value = false;
+  }
+};
 </script>
 
 <template>
@@ -53,19 +60,25 @@ const { errors, submitting, submit } = useFormSubmit({
         <p><strong>Keinginan tidak langsung berlaku.</strong> Ia disimpan terkunci sampai kamu menyelesaikan misi belajar.</p>
       </div>
 
-      <FormField id="tx-title" label="Judul" :error="errors.title" v-slot="{ invalid, describedBy }">
-        <input id="tx-title" v-model="form.title" class="input" placeholder="Contoh: Makan siang kantin" :aria-invalid="invalid" :aria-describedby="describedBy" />
-      </FormField>
+      <div class="field">
+        <label for="tx-title">Judul</label>
+        <input id="tx-title" v-model="form.title" class="input" placeholder="Contoh: Makan siang kantin" :aria-invalid="Boolean(errors.title)" />
+        <span v-if="errors.title" class="field-error">{{ errors.title }}</span>
+      </div>
 
       <div class="pair">
-        <FormField id="tx-amount" label="Nominal (Rp)" :error="errors.amount" v-slot="{ invalid, describedBy }">
-          <input id="tx-amount" v-model="form.amount" class="input num" type="number" min="0" step="500" inputmode="numeric" :aria-invalid="invalid" :aria-describedby="describedBy" />
-        </FormField>
-        <FormField id="tx-category" label="Kategori" :error="errors.category">
+        <div class="field">
+          <label for="tx-amount">Nominal (Rp)</label>
+          <input id="tx-amount" v-model="form.amount" class="input num" type="number" min="0" step="500" inputmode="numeric" :aria-invalid="Boolean(errors.amount)" />
+          <span v-if="errors.amount" class="field-error">{{ errors.amount }}</span>
+        </div>
+        <div class="field">
+          <label for="tx-category">Kategori</label>
           <select id="tx-category" v-model="form.category" class="input">
             <option v-for="category in CATEGORIES" :key="category" :value="category">{{ category }}</option>
           </select>
-        </FormField>
+          <span v-if="errors.category" class="field-error">{{ errors.category }}</span>
+        </div>
       </div>
 
       <fieldset v-if="isWant" class="field mission-pick">
@@ -79,9 +92,10 @@ const { errors, submitting, submit } = useFormSubmit({
         </label>
       </fieldset>
 
-      <FormField id="tx-note" label="Catatan (opsional)">
+      <div class="field">
+        <label for="tx-note">Catatan (opsional)</label>
         <input id="tx-note" v-model="form.note" class="input" maxlength="255" />
-      </FormField>
+      </div>
 
       <div class="foot">
         <button type="button" class="btn" @click="emit('close')">Batal</button>
@@ -95,7 +109,7 @@ const { errors, submitting, submit } = useFormSubmit({
 .segment { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 0 0 1rem; padding: 0; border: 1.5px solid var(--ink); border-radius: var(--radius-s); overflow: hidden; }
 .segment-option { padding: 0.55rem 0.25rem; text-align: center; font-weight: 600; cursor: pointer; border-right: 1.5px solid var(--ink); }
 .segment-option:last-child { border-right: 0; }
-.segment-option.on { background: var(--ink); color: var(--surface); }
+.segment-option.on { background: var(--ink); color: #fff; }
 .segment-option:focus-within { outline: 3px solid var(--cobalt); outline-offset: -3px; }
 .lock-note { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.7rem 0.85rem; margin-bottom: 1rem; background: var(--brass-wash); color: var(--brass-ink); border-left: 5px solid var(--brass); font-size: 0.9rem; }
 .pair { display: grid; gap: 0 1rem; }

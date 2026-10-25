@@ -115,7 +115,7 @@ const initial = computed(() => name.value.charAt(0).toUpperCase());
 
 <style scoped>
 .eyebrow {
-  color: rgb(var(--brand-500));
+  color: #6366f1;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.28em;
@@ -123,7 +123,7 @@ const initial = computed(() => name.value.charAt(0).toUpperCase());
 .identity-card {
   min-height: 9rem;
   padding: 1.5rem 1.75rem;
-  border: 1px solid var(--line);
+  border: 1px solid #e2e8f0;
   border-radius: 1.5rem;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 8px 24px -18px rgb(15 23 42 / 0.2);
@@ -132,13 +132,13 @@ const initial = computed(() => name.value.charAt(0).toUpperCase());
   width: 5.25rem;
   height: 5.25rem;
   padding: 0.2rem;
-  border: 2px solid var(--teal-200);
+  border: 2px solid #99f6e4;
   border-radius: 50%;
 }
 .avatar {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgb(var(--brand-500)), var(--violet));
+  background: linear-gradient(135deg, #6366f1, #9333ea);
 }
 .photo-action {
   position: absolute;
@@ -147,7 +147,7 @@ const initial = computed(() => name.value.charAt(0).toUpperCase());
   width: 1.8rem;
   height: 1.8rem;
   color: white;
-  background: var(--teal-700);
+  background: #0f766e;
 }
 .photo-action:disabled {
   cursor: not-allowed;
@@ -165,53 +165,53 @@ const initial = computed(() => name.value.charAt(0).toUpperCase());
   height: 2.5rem;
 }
 .profile-icon {
-  color: var(--teal-700);
-  background: var(--teal-50);
+  color: #0f766e;
+  background: #f0fdfa;
 }
 .security-icon {
-  color: rgb(var(--brass-700));
-  background: rgb(var(--brass-50));
+  color: #b45309;
+  background: #fffbeb;
 }
 .field {
   margin: 0;
 }
 .field > label {
-  color: var(--ink-soft);
+  color: #475569;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .input[readonly] {
-  color: var(--ink-medium);
-  background: var(--surface);
+  color: #334155;
+  background: #fff;
 }
 .input:disabled {
-  color: var(--ink-soft);
-  background: var(--paper);
+  color: #475569;
+  background: #f8fafc;
   cursor: not-allowed;
 }
 .availability-note {
   padding: 0.75rem 0.85rem;
-  border: 1px solid var(--line);
+  border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
-  color: var(--ink-soft);
-  background: var(--paper);
+  color: #475569;
+  background: #f8fafc;
   font-size: 0.8rem;
   line-height: 1.5;
 }
 .security-note {
-  color: rgb(var(--brass-800));
-  border-color: rgb(var(--brass-200));
-  background: rgb(var(--brass-50));
+  color: #854d0e;
+  border-color: #fde68a;
+  background: #fffbeb;
 }
 .save-button {
-  color: var(--surface);
-  background: var(--teal-700);
+  color: #fff;
+  background: #0f766e;
 }
 .password-button {
-  color: var(--surface);
-  background: var(--ink);
+  color: #fff;
+  background: #0f172a;
 }
 @media (max-width: 639px) {
   .identity-card {

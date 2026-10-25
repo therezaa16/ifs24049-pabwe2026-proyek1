@@ -1,14 +1,14 @@
 export const budgetUsage = ({ monthlyBudget, monthlySpending }) => {
   const budget = Number(monthlyBudget);
-  if (budget <= 0 || Number.isNaN(budget)) return { hasBudget: false, percent: 0, level: 'none', over: false };
+  if (budget <= 0 || Number.isNaN(budget)) return { hasBudget: false, percent: 0, tone: 'none', over: false };
 
   const ratio = monthlySpending / budget;
   const percent = Math.min(100, Math.max(0, Math.round(ratio * 100)));
   const over = ratio > 1;
-  let level = 'ok';
-  if (over) level = 'danger';
-  else if (ratio >= 0.8) level = 'warning';
-  return { hasBudget: true, percent, level, over };
+  let tone = 'ok';
+  if (over) tone = 'danger';
+  else if (ratio >= 0.8) tone = 'warning';
+  return { hasBudget: true, percent, tone, over };
 };
 
 export const disciplineLabel = (score) => {
