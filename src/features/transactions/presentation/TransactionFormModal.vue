@@ -4,11 +4,10 @@ import { fieldErrorsOf } from '@/core/http/api-error.js';
 import { MISSION_LABELS, MISSION_TYPES } from '@/shared/domain/mission-types.js';
 import BaseModal from '@/shared/components/BaseModal.vue';
 import AppIcon from '@/shared/components/AppIcon.vue';
-import { CATEGORIES, TRANSACTION_TYPES } from '../domain/transaction.model.js';
+import { CATEGORIES, TRANSACTION_TYPES, TYPE_LABELS } from '../domain/transaction.model.js';
 import { validateTransactionForm } from '../domain/transaction.validators.js';
 import { useTransactionsStore } from '../application/transactions.store.js';
 import { useToast } from '@/shared/composables/useToast.js';
-import { TYPE_LABELS } from './transaction.presenter.js';
 
 const emit = defineEmits(['close']);
 const store = useTransactionsStore();
