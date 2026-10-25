@@ -36,6 +36,62 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers());
 
 describe('BaseModal', () => {
+  it('mengikat judul secara semantik dan menjaga fokus keyboard di dalam modal', async () => {
+    const wrapper = mount(BaseModal, {
+      props: { title: 'Judul dialog' },
+      slots: { default: '<button id="first">Pertama</button><button id="middle">Tengah</button><button id="last">Terakhir</button><button hidden>Tersembunyi</button><button aria-hidden="true">Tidak terlihat</button>' },
+      attachTo: document.body
+    });
+    await flushPromises();
+
+    const dialog = wrapper.find('dialog');
+    const middle = wrapper.find('#middle').element;
+    const last = wrapper.find('#last').element;
+    const close = wrapper.find('button[aria-label="Tutup"]').element;
+    expect(dialog.attributes('aria-labelledby')).toBe(wrapper.find('h2').attributes('id'));
+    expect(document.activeElement).toBe(close);
+
+    middle.focus();
+    const forwardWithinModal = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+    document.dispatchEvent(forwardWithinModal);
+    expect(forwardWithinModal.defaultPrevented).toBe(false);
+
+    middle.focus();
+    const backwardWithinModal = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
+    document.dispatchEvent(backwardWithinModal);
+    expect(backwardWithinModal.defaultPrevented).toBe(false);
+
+    last.focus();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+    expect(document.activeElement).toBe(close);
+
+    close.focus();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
+    expect(document.activeElement).toBe(last);
+
+    wrapper.unmount();
+  });
+
+  it('mengembalikan fokus ke dalam dialog jika fokus keluar dan menangani dialog tanpa kontrol fokus', async () => {
+    const opener = document.createElement('button');
+    document.body.appendChild(opener);
+    opener.focus();
+    const wrapper = mount(BaseModal, { props: { title: 'Dialog kosong' }, attachTo: document.body });
+    await flushPromises();
+    const dialog = wrapper.find('dialog').element;
+    wrapper.find('button[aria-label="Tutup"]').element.remove();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+    expect(document.activeElement).toBe(dialog);
+
+    opener.focus();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
+    expect(document.activeElement).toBe(dialog);
+
+    wrapper.unmount();
+    opener.remove();
+  });
+
   it('menutup lewat Escape, backdrop, dan tombol tutup; mengabaikan tombol lain', async () => {
     const opener = document.createElement('button');
     document.body.appendChild(opener);
@@ -66,6 +122,17 @@ describe('BaseModal', () => {
     const dialog = wrapper.find('.dialog').element;
     wrapper.unmount();
     expect(dialog.isConnected).toBe(false);
+  });
+
+  it('tidak mencoba memulihkan fokus ke pemicu yang sudah dilepas dari dokumen', async () => {
+    const opener = document.createElement('button');
+    document.body.appendChild(opener);
+    opener.focus();
+    const wrapper = mount(BaseModal, { props: { title: 'Judul' }, attachTo: document.body });
+    await flushPromises();
+    opener.remove();
+
+    expect(() => wrapper.unmount()).not.toThrow();
   });
 });
 

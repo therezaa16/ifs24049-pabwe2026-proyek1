@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref, useId } from 'vue';
 import AppIcon from './AppIcon.vue';
 
 defineProps({
@@ -9,21 +9,55 @@ defineProps({
 const emit = defineEmits(['close']);
 
 const dialog = ref(null);
-const previouslyFocused = document.activeElement;
+const titleId = useId();
+let previouslyFocused = null;
+
+const focusableElements = () => {
+  if (!dialog.value) return [];
+
+  return [...dialog.value.querySelectorAll(
+    'a[href], button:not(:disabled), input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])'
+  )].filter((element) => !element.hasAttribute('hidden') && element.getAttribute('aria-hidden') !== 'true');
+};
 
 const onKeydown = (event) => {
-  if (event.key === 'Escape') emit('close');
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    emit('close');
+    return;
+  }
+
+  if (event.key !== 'Tab') return;
+
+  const focusable = focusableElements();
+  if (focusable.length === 0) {
+    event.preventDefault();
+    dialog.value?.focus();
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && (document.activeElement === first || !dialog.value.contains(document.activeElement))) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (document.activeElement === last || !dialog.value.contains(document.activeElement))) {
+    event.preventDefault();
+    first.focus();
+  }
 };
 
 onMounted(async () => {
+  previouslyFocused = document.activeElement;
   document.addEventListener('keydown', onKeydown);
   await nextTick();
-  dialog.value?.focus();
+  const firstFocusable = focusableElements()[0];
+  (firstFocusable || dialog.value)?.focus();
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', onKeydown);
-  previouslyFocused?.focus?.();
+  if (previouslyFocused?.isConnected) previouslyFocused.focus();
 });
 </script>
 
@@ -35,11 +69,11 @@ onBeforeUnmount(() => {
       class="dialog"
       :class="{ 'dialog-wide': wide }"
       aria-modal="true"
-      :aria-label="title"
+      :aria-labelledby="titleId"
       tabindex="-1"
     >
       <header class="dialog-head">
-        <h2>{{ title }}</h2>
+        <h2 :id="titleId">{{ title }}</h2>
         <button type="button" class="btn btn-quiet btn-small" aria-label="Tutup" @click="emit('close')">
           <AppIcon name="close" />
         </button>

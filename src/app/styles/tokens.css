@@ -13,13 +13,33 @@
   --ink-faint: #64748b;
   --line: #e2e8f0;
 
-  --cobalt: #4f46e5;
-  --cobalt-deep: #4338ca;
-  --cobalt-wash: #eef2ff;
+  --brand-50: 238 242 255;
+  --brand-100: 224 231 255;
+  --brand-200: 199 210 254;
+  --brand-300: 165 180 252;
+  --brand-400: 129 140 248;
+  --brand-500: 99 102 241;
+  --brand-600: 79 70 229;
+  --brand-700: 67 56 202;
+  --brand-800: 55 48 163;
+  --brand-900: 49 46 129;
+  --cobalt: rgb(var(--brand-600));
+  --cobalt-deep: rgb(var(--brand-700));
+  --cobalt-wash: rgb(var(--brand-50));
 
-  --brass: #f59e0b;
-  --brass-ink: #92400e;
-  --brass-wash: #fef3c7;
+  --brass-50: 255 251 235;
+  --brass-100: 254 243 199;
+  --brass-200: 253 230 138;
+  --brass-300: 252 211 77;
+  --brass-400: 251 191 36;
+  --brass-500: 245 158 11;
+  --brass-600: 217 119 6;
+  --brass-700: 180 83 9;
+  --brass-800: 146 64 14;
+  --brass-900: 120 53 15;
+  --brass: rgb(var(--brass-500));
+  --brass-ink: rgb(var(--brass-800));
+  --brass-wash: rgb(var(--brass-100));
 
   --moss: #059669;
   --moss-wash: #ecfdf5;
